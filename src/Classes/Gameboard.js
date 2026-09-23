@@ -37,8 +37,8 @@ class Gameboard {
         return false;
       }
       // check if ship bumped into another ship
-      const targetCell = this.#board[currentX][currentY];
-      const isCellOccupied = targetCell.Ship !== null;
+      const targetCell = this.#board[currentX][currentY].Ship;
+      const isCellOccupied = targetCell !== null;
       if (isCellOccupied) {
         return false;
       }
@@ -54,11 +54,11 @@ class Gameboard {
     const newShip = new Ship(length, direction);
     if (!this.#validatePossibilities(x, y, direction, length))
       throw new Error("invalid ship position");
-    this.#ships.push(newShip);
     for (let i = 0; i < length; i++) {
-      if (direction === v) this.#board[x + 1][y].ship = newShip;
-      else this.#board[x][y + 1].ship = newShip;
+      if (direction === "v") this.#board[x + i][y].ship = newShip;
+      else this.#board[x][y + i].ship = newShip;
     }
+    this.#ships.push(newShip);
     return true;
   }
   receiveAttack() {}
