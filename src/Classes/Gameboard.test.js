@@ -1,8 +1,8 @@
 import Gameboard from "./Gameboard.js";
 
 describe("Board Functionalities", () => {
-  describe("Placing a ship", () => {
-    const gameboard = new Gameboard();
+  const gameboard = new Gameboard();
+  describe("Validating Coordinates", () => {
     it("should throw error for invalid coordinates", () => {
       expect(() => gameboard.placeShip(3, [10, -9], "h")).toThrow(
         new Error("out-of-bound coordinates are not acceptable"),
@@ -14,7 +14,9 @@ describe("Board Functionalities", () => {
         new Error("out-of-bound coordinates are not acceptable"),
       );
     });
-    it("should throw an error for valid coordinates but invalid ship position", () => {
+  });
+  describe("Placing a ship", () => {
+    it("should throw an error for invalid ship position", () => {
       // out-of-bound cases
       expect(() => gameboard.placeShip(3, [9, 9], "v")).toThrow(
         new Error("invalid ship position"),
@@ -54,11 +56,40 @@ describe("Board Functionalities", () => {
         new Error("invalid ship position"),
       ); // h (len 2): tries to occupy [2, 0] to [2, 1], overlaps at [2, 1]
     });
-    it("should return true for valid coordinates and valid ship position", () => {
-      expect(() => gameboard.placeShip(4, [0, 0], "h")).toBeTruthy();
-      expect(() => gameboard.placeShip(5, [9, 2], "v")).toBeTruthy();
-      expect(() => gameboard.placeShip(2, [4, 3], "h")).toBeTruthy();
-      expect(() => gameboard.placeShip(3, [6, 6], "v")).toBeTruthy();
+    it("should not throw an error for valid coordinates ship position", () => {
+      expect(() => gameboard.placeShip(4, [0, 0], "h")).not.toThrow(
+        new Error("invalid ship position"),
+      );
+      expect(() => gameboard.placeShip(5, [2, 2], "v")).not.toThrow(
+        new Error("invalid ship position"),
+      );
+      expect(() => gameboard.placeShip(3, [6, 6], "v")).not.toThrow(
+        new Error("invalid ship position"),
+      );
+    });
+  });
+  describe("Receiving Attacks", () => {
+    const board = gameboard.Board;
+    it("should correctly update the hit status for attacked slots and ships", () => {
+      // place ships to correctly test functionality
+      gameboard.placeShip(4, [3, 4], "h");
+      gameboard.placeShip(3, [5, 1, "v"]);
+      gameboard.placeShip(2, [7, 9], "v");
+      // receive attacks on ships parts
+      gameboard.receiveAttack([3, 4]);
+      gameboard.receiveAttack([5, 1]);
+      gameboard.receiveAttack([7, 9]);
+      // ensure both the slot and the ship record the hit
+      expect(board[3][4].HitStatus).toBeTruthy();
+      expect(board[5][1].HitStatus).toBeTruthy();
+      expect(board[7][9].HitStatus).toBeTruthy();
+      expect(board[3][4].Ship.HitCount).toBe(1);
+      expect(board[5][1].Ship.HitCount).toBe(1);
+      expect(board[7][9].Ship.HitCount).toBe(1);
+      // check missed shots with ship-less slots
+      gameboard.receiveAttack([9, 9]);
+      expect(board[9][9].HitStatus).toBeTruthy();
+      expect(board[9][9].Ship).toBeNull();
     });
   });
 });

@@ -10,6 +10,9 @@ class Gameboard {
   get Ships() {
     return this.#ships;
   }
+  get Board() {
+    return this.#board;
+  }
 
   // validate coordinates to be between [0][0] and [9][9]
   #validateCoordinates(x, y) {
@@ -49,19 +52,30 @@ class Gameboard {
   placeShip(length, coordinates, direction) {
     // destructuring coordinates for easier usage
     const [x, y] = [coordinates[0], coordinates[1]];
+    // validate coordinates
     if (!this.#validateCoordinates(x, y))
       throw new Error("out-of-bound coordinates are not acceptable");
+    // create new ship and validate its position
     const newShip = new Ship(length, direction);
     if (!this.#validatePossibilities(x, y, direction, length))
       throw new Error("invalid ship position");
+    // assign ship to corresponding board slots
     for (let i = 0; i < length; i++) {
       if (direction === "v") this.#board[x + i][y].ship = newShip;
       else this.#board[x][y + i].ship = newShip;
     }
     this.#ships.push(newShip);
-    return true;
   }
-  receiveAttack() {}
+  receiveAttack(coordinates) {
+    // destructuring coordinates for easier usage
+    const [x, y] = [coordinates[0], coordinates[1]];
+    const attackedSlot = this.#board[x][y];
+    if (!this.#validateCoordinates(x, y))
+      throw new Error("out-of-bound coordinates are not acceptable");
+
+    if (!attackedSlot.HitStatus) attackedSlot.hit();
+    if (attackedSlot.Ship) attackedSlot.Ship.hit();
+  }
 }
 
 export default Gameboard;
