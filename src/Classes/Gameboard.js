@@ -88,7 +88,7 @@ class Gameboard {
     const ships = this.#ships;
     let sunkShips = 0;
     for (let i = 0; i < ships.length; i++) {
-      if (ships[i].SinkStatus) sunkShips += 1;
+      if (ships[i].isSunk()) sunkShips += 1;
     }
     if (sunkShips === 5) this.#reportAllSunkShips();
   }

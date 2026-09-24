@@ -12,9 +12,6 @@ class Ship {
   get HitCount() {
     return this.#hitCount;
   }
-  get SinkStatus() {
-    return this.#sinkStatus;
-  }
 
   hit() {
     this.#hitCount += 1;
@@ -22,9 +19,8 @@ class Ship {
   isSunk() {
     if (this.#hitCount === this.#length) {
       this.#sinkStatus = true;
-      return true;
     }
-    return false;
+    return this.#sinkStatus;
   }
 }
 
