@@ -1,16 +1,17 @@
+import Gameboard from "./Gameboard.js";
+
 class Player {
   #type;
-  #gameboard;
+  #gameboard = new Gameboard();
 
-  constructor(type, gameboard) {
+  constructor(type) {
     this.#type = type;
-    this.#gameboard = gameboard;
   }
 
   get Type() {
     return this.#type;
   }
-  get Gameboard() {
+  get Board() {
     return this.#gameboard;
   }
 }
