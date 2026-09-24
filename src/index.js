@@ -1,2 +1,3 @@
-import "./styles.css";
-document.addEventListener("DOMContentLoaded", console.log("Hi"));
+import Gameboard from "./Classes/Gameboard.js";
+
+const gameboard = new Gameboard();

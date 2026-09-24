@@ -1,8 +1,13 @@
 import Gameboard from "./Gameboard.js";
 
 describe("Board Functionalities", () => {
-  describe("Placing a ship", () => {
-    const gameboard = new Gameboard();
+  let gameboard;
+  // start the gameboard with a fresh state inside each 'it'
+  beforeEach(() => {
+    gameboard = new Gameboard();
+  });
+
+  describe("Validating Coordinates", () => {
     it("should throw error for invalid coordinates", () => {
       expect(() => gameboard.placeShip(3, [10, -9], "h")).toThrow(
         new Error("out-of-bound coordinates are not acceptable"),
@@ -14,7 +19,9 @@ describe("Board Functionalities", () => {
         new Error("out-of-bound coordinates are not acceptable"),
       );
     });
-    it("should throw an error for valid coordinates but invalid ship position", () => {
+  });
+  describe("Placing a ship", () => {
+    it("should throw an error for invalid ship position", () => {
       // out-of-bound cases
       expect(() => gameboard.placeShip(3, [9, 9], "v")).toThrow(
         new Error("invalid ship position"),
@@ -54,11 +61,79 @@ describe("Board Functionalities", () => {
         new Error("invalid ship position"),
       ); // h (len 2): tries to occupy [2, 0] to [2, 1], overlaps at [2, 1]
     });
-    it("should return true for valid coordinates and valid ship position", () => {
-      expect(() => gameboard.placeShip(4, [0, 0], "h")).toBeTruthy();
-      expect(() => gameboard.placeShip(5, [9, 2], "v")).toBeTruthy();
-      expect(() => gameboard.placeShip(2, [4, 3], "h")).toBeTruthy();
-      expect(() => gameboard.placeShip(3, [6, 6], "v")).toBeTruthy();
+    it("should not throw an error for valid coordinates ship position", () => {
+      expect(() => gameboard.placeShip(4, [0, 0], "h")).not.toThrow(
+        new Error("invalid ship position"),
+      );
+      expect(() => gameboard.placeShip(5, [2, 2], "v")).not.toThrow(
+        new Error("invalid ship position"),
+      );
+      expect(() => gameboard.placeShip(3, [6, 6], "v")).not.toThrow(
+        new Error("invalid ship position"),
+      );
+    });
+  });
+  describe("Receiving Attacks", () => {
+    it("should correctly update the hit status for attacked slots and ships", () => {
+      const board = gameboard.Board;
+      // place ships to correctly test functionality
+      gameboard.placeShip(4, [3, 4], "h");
+      gameboard.placeShip(3, [5, 1], "v");
+      gameboard.placeShip(2, [7, 9], "v");
+      // receive attacks on ships parts
+      gameboard.receiveAttack([3, 4]);
+      gameboard.receiveAttack([5, 1]);
+      gameboard.receiveAttack([7, 9]);
+      // ensure both the slot and the ship record the hit
+      expect(board[3][4].HitStatus).toBeTruthy();
+      expect(board[5][1].HitStatus).toBeTruthy();
+      expect(board[7][9].HitStatus).toBeTruthy();
+      expect(board[3][4].Ship.HitCount).toBe(1);
+      expect(board[5][1].Ship.HitCount).toBe(1);
+      expect(board[7][9].Ship.HitCount).toBe(1);
+      // check missed shots with ship-less slots
+      gameboard.receiveAttack([9, 9]);
+      expect(board[9][9].HitStatus).toBeTruthy();
+      expect(board[9][9].Ship).toBeNull();
+    });
+    it("should report when all ships have been sunk", () => {
+      // 5 ships of standard sizes (5, 4, 3, 3, 2) placed non-overlapping
+      gameboard.placeShip(5, [0, 0], "h"); // (0,0) to (0,4)
+      gameboard.placeShip(4, [1, 0], "h"); // (1,0) to (1,3)
+      gameboard.placeShip(3, [2, 0], "h"); // (2,0) to (2,2)
+      gameboard.placeShip(3, [3, 0], "h"); // (3,0) to (3,2)
+      gameboard.placeShip(2, [4, 0], "h"); // (4,0) to (4,1)
+
+      expect(gameboard.allShipsStatus).toBeFalsy();
+
+      // Attack ship 1 (size 5)
+      gameboard.receiveAttack([0, 0]);
+      gameboard.receiveAttack([0, 1]);
+      gameboard.receiveAttack([0, 2]);
+      gameboard.receiveAttack([0, 3]);
+      gameboard.receiveAttack([0, 4]);
+
+      // Attack ship 2 (size 4)
+      gameboard.receiveAttack([1, 0]);
+      gameboard.receiveAttack([1, 1]);
+      gameboard.receiveAttack([1, 2]);
+      gameboard.receiveAttack([1, 3]);
+
+      // Attack ship 3 (size 3)
+      gameboard.receiveAttack([2, 0]);
+      gameboard.receiveAttack([2, 1]);
+      gameboard.receiveAttack([2, 2]);
+
+      // Attack ship 4 (size 3)
+      gameboard.receiveAttack([3, 0]);
+      gameboard.receiveAttack([3, 1]);
+      gameboard.receiveAttack([3, 2]);
+
+      // Attack ship 5 (size 2)
+      gameboard.receiveAttack([4, 0]);
+      gameboard.receiveAttack([4, 1]);
+
+      expect(gameboard.allShipsStatus).toBeTruthy();
     });
   });
 });

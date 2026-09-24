@@ -2,10 +2,8 @@ class Ship {
   #length;
   #hitCount = 0;
   #sinkStatus = false;
-  #direction;
-  constructor(length, direction) {
+  constructor(length) {
     this.#length = length;
-    this.#direction = direction;
   }
 
   get Length() {
@@ -16,9 +14,6 @@ class Ship {
   }
   get SinkStatus() {
     return this.#sinkStatus;
-  }
-  get Direction() {
-    return this.#direction;
   }
 
   hit() {
