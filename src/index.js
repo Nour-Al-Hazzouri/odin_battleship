@@ -1,3 +1,4 @@
-import Gameboard from "./Classes/Gameboard.js";
+import "./styles.css";
+import { renderHome } from "./UI/main/home.js";
 
-const gameboard = new Gameboard();
+renderHome();

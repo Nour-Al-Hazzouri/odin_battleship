@@ -49,9 +49,7 @@ class Gameboard {
       // check if ship bumped into another ship
       const targetCell = this.#board[currentX][currentY].Ship;
       const isCellOccupied = targetCell !== null;
-      if (isCellOccupied) {
-        return false;
-      }
+      if (isCellOccupied) return false;
     }
     return true;
   }

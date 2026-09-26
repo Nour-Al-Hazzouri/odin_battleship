@@ -1,5 +1,110 @@
+/* default styling */
 html,
 body {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
+}
+
+/* layout for main elements */
+body {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  border-bottom: 1px solid black;
+}
+
+/* take up all available space for footer to stay on bottom */
+main {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+}
+
+/* mother container of both grids */
+.boards-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 40px;
+  width: 100%;
+}
+
+/* first section: ships panel */
+.ships-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.ships-grid {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 310px;
+  height: 310px;
+  border: 1px solid black;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.axis-btn-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.actual-ships-grid {
+  display: grid;
+  flex-grow: 1;
+  width: 100%;
+}
+
+/* second section: 10x10 board panel */
+.board-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+}
+
+.board-grid {
+  display: grid;
+  grid-template-columns: repeat(10, 30px);
+  grid-template-rows: repeat(10, 30px);
+  gap: 1px;
+}
+
+.cell-btn {
+  width: 30px;
+  height: 30px;
+}
+
+.controls-container {
+  display: flex;
+  flex-direction: row;
+  gap: 15px;
+}
+
+/* play button centered at bottom */
+.play-btn-container {
+  display: flex;
+  justify-content: center;
+}
+
+footer {
+  margin-top: auto;
+  border-top: 1px solid black;
+  text-align: center;
 }
