@@ -22,3 +22,38 @@ Created the core layout structure for the Battleship home UI in `home.js` and st
 ### Plain English Summary
 
 Moved the vertical/horizontal axis button inside the bordered `ships-grid` container as a child alongside the actual ships grid element so that button layout is isolated from the grid system.
+
+## Request #3 - 2026-09-27
+
+- **Technical Summary**: Implemented second page playground view structure in `src/ui/main/playground.js` and styled layout in `src/styles.css`.
+- **Modified Files**:
+  - `src/ui/main/playground.js`: Created `renderPlayground()` creating two `<section>` containers (Player on left, Computer on right) containing `<h2>`, `createBoardGrid()`, and status `<span>`.
+  - `src/styles.css`: Added flex-column container styling for `.playground-section` with zero spacing/margin between sections, internal padding, and `border-right` on `.player-section`.
+  - `CHANGES.md`: Logged Request #3 details per protocol.
+
+### Plain English Summary
+
+Built the layout structure for the second (playground) page containing Player and Computer sections placed side-by-side with no space between them, separated by a dividing border line and padded internally.
+
+## Request #4 - 2026-09-27
+
+- **Technical Summary**: Created `resetElement` utility component in `src/ui/main/components/resetElement.js`.
+- **Modified Files**:
+  - `src/ui/main/components/resetElement.js`: Implemented `resetElement(element)` function that iteratively removes all `firstChild` nodes while present.
+  - `CHANGES.md`: Logged Request #4 details.
+
+### Plain English Summary
+
+Added a utility component function `resetElement` that clears all child elements inside a passed DOM container to allow wiping and resetting content when navigating between pages.
+
+## Request #5 - 2026-09-27
+
+- **Technical Summary**: Wrapped playground sections in a flex row `.playground-container` element.
+- **Modified Files**:
+  - `src/ui/main/playground.js`: Created `.playground-container` `<div>` wrapping `playerSection` and `computerSection` before appending to `main`.
+  - `src/styles.css`: Added `.playground-container` CSS rule with `display: flex` and `flex-direction: row`.
+  - `CHANGES.md`: Logged Request #5 details.
+
+### Plain English Summary
+
+Wrapped the two playground sections inside a `playground-container` element styled as a flex row to place the Player and Computer boards side-by-side inside the main section container.

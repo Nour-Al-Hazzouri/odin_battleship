@@ -1,5 +1,11 @@
+import { createBoardGrid } from "./components/grid.js";
+import { resetElement } from "./components/resetElement.js";
+import { renderPlayground } from "./playground.js";
+
 export function renderHome() {
   const main = document.querySelector("main");
+
+  resetElement(main);
 
   const boardsContainer = document.createElement("div");
   boardsContainer.classList.add("boards-container");
@@ -31,13 +37,7 @@ export function renderHome() {
   const boardSection = document.createElement("div");
   boardSection.classList.add("board-section");
 
-  const boardGrid = document.createElement("div");
-  boardGrid.classList.add("board-grid");
-  for (let i = 0; i < 100; i++) {
-    const cellBtn = document.createElement("button");
-    cellBtn.classList.add("cell-btn");
-    boardGrid.appendChild(cellBtn);
-  }
+  const boardGrid = createBoardGrid();
 
   const controlsContainer = document.createElement("div");
   controlsContainer.classList.add("controls-container");
@@ -67,6 +67,8 @@ export function renderHome() {
   playBtn.classList.add("play-btn");
   playBtn.textContent = "Play";
   playBtnContainer.appendChild(playBtn);
+
+  playBtn.addEventListener("click", renderPlayground);
 
   main.appendChild(boardsContainer);
   main.appendChild(playBtnContainer);
