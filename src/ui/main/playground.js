@@ -1,5 +1,5 @@
-import { createBoardGrid } from "./components/grid.js";
-import { resetElement } from "./components/resetElement.js";
+import { createBoardGrid } from "../components/grid.js";
+import { resetElement } from "../components/resetElement.js";
 
 export function renderPlayground() {
   const main = document.querySelector("main");

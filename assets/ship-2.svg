@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 80 40"
+     width="80" height="40"
+     class="ship ship-2"
+     data-size="2"
+     role="img"
+     aria-label="Patrol Boat (size 2)">
+
+  <style>
+    .ship { overflow: visible; }
+
+    /* ── Segment base ── */
+    .segment {
+      transition: fill 0.25s ease, filter 0.25s ease;
+      cursor: pointer;
+    }
+    .seg-body   { fill: #4a7c9e; }
+    .seg-bow    { fill: #5a9abf; }   /* front cap */
+    .seg-stern  { fill: #3a6a8e; }   /* rear cap  */
+
+    /* ── Hit state ── */
+    .segment.hit .seg-body,
+    .segment.hit .seg-bow,
+    .segment.hit .seg-stern {
+      fill: #c0392b;
+      filter: drop-shadow(0 0 4px #ff6b6b);
+    }
+    .segment.hit .hit-marker { display: block; }
+    .hit-marker { display: none; }
+
+    /* ── Hover (non-hit) ── */
+    .segment:not(.hit):hover .seg-body,
+    .segment:not(.hit):hover .seg-bow,
+    .segment:not(.hit):hover .seg-stern {
+      fill: #6aafd4;
+    }
+
+    /* ── Vertical orientation ──
+         Add class="ship ship-2 vertical" to the <svg> root.
+         The ship pivots around its top-left origin.
+         Caller must also swap width/height attributes (40/80). */
+    .ship.vertical {
+      transform: rotate(90deg);
+      transform-origin: 20px 20px;
+    }
+  </style>
+
+  <!-- Segment 0 — stern (rear) -->
+  <g class="segment" id="seg-0" data-index="0">
+    <!-- rounded left cap -->
+    <path class="seg-stern"
+          d="M 12,4 H 40 V 36 H 12 Q 2,36 2,20 Q 2,4 12,4 Z"/>
+    <!-- rivet row -->
+    <circle cx="14" cy="12" r="2" fill="#2a4a6a" opacity="0.6"/>
+    <circle cx="14" cy="28" r="2" fill="#2a4a6a" opacity="0.6"/>
+    <circle cx="22" cy="8"  r="2" fill="#2a4a6a" opacity="0.6"/>
+    <circle cx="22" cy="32" r="2" fill="#2a4a6a" opacity="0.6"/>
+    <!-- deck stripe -->
+    <rect x="8" y="17" width="32" height="6" fill="#3a8abf" opacity="0.4" rx="2"/>
+    <!-- hit marker (X) -->
+    <g class="hit-marker">
+      <line x1="6"  y1="6"  x2="38" y2="34" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+      <line x1="38" y1="6"  x2="6"  y2="34" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+    </g>
+    <!-- divider -->
+    <line x1="40" y1="4" x2="40" y2="36" stroke="#2a4a6a" stroke-width="1.5"/>
+  </g>
+
+  <!-- Segment 1 — bow (front/nose) -->
+  <g class="segment" id="seg-1" data-index="1">
+    <!-- rounded right cap -->
+    <path class="seg-bow"
+          d="M 40,4 H 68 Q 78,4 78,20 Q 78,36 68,36 H 40 Z"/>
+    <!-- rivet row -->
+    <circle cx="46" cy="12" r="2" fill="#2a4a6a" opacity="0.6"/>
+    <circle cx="46" cy="28" r="2" fill="#2a4a6a" opacity="0.6"/>
+    <circle cx="66" cy="12" r="2" fill="#2a4a6a" opacity="0.6"/>
+    <circle cx="66" cy="28" r="2" fill="#2a4a6a" opacity="0.6"/>
+    <!-- deck stripe -->
+    <rect x="40" y="17" width="32" height="6" fill="#3a8abf" opacity="0.4" rx="2"/>
+    <!-- hit marker (X) -->
+    <g class="hit-marker">
+      <line x1="42" y1="6"  x2="76" y2="34" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+      <line x1="76" y1="6"  x2="42" y2="34" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+    </g>
+  </g>
+
+</svg>

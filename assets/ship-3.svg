@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 120 40"
+     width="120" height="40"
+     class="ship ship-3"
+     data-size="3"
+     role="img"
+     aria-label="Submarine (size 3)">
+
+  <style>
+    .ship { overflow: visible; }
+
+    .segment {
+      transition: fill 0.25s ease, filter 0.25s ease;
+      cursor: pointer;
+    }
+    .seg-body   { fill: #4a7c9e; }
+    .seg-bow    { fill: #5a9abf; }
+    .seg-stern  { fill: #3a6a8e; }
+
+    .segment.hit .seg-body,
+    .segment.hit .seg-bow,
+    .segment.hit .seg-stern {
+      fill: #c0392b;
+      filter: drop-shadow(0 0 4px #ff6b6b);
+    }
+    .segment.hit .hit-marker { display: block; }
+    .hit-marker { display: none; }
+
+    .segment:not(.hit):hover .seg-body,
+    .segment:not(.hit):hover .seg-bow,
+    .segment:not(.hit):hover .seg-stern {
+      fill: #6aafd4;
+    }
+
+    .ship.vertical {
+      transform: rotate(90deg);
+      transform-origin: 20px 20px;
+    }
+  </style>
+
+  <!-- Segment 0 — stern -->
+  <g class="segment" id="seg-0" data-index="0">
+    <path class="seg-stern"
+          d="M 12,4 H 40 V 36 H 12 Q 2,36 2,20 Q 2,4 12,4 Z"/>
+    <circle cx="14" cy="12" r="2" fill="#2a4a6a" opacity="0.6"/>
+    <circle cx="14" cy="28" r="2" fill="#2a4a6a" opacity="0.6"/>
+    <circle cx="24" cy="8"  r="2" fill="#2a4a6a" opacity="0.6"/>
+    <circle cx="24" cy="32" r="2" fill="#2a4a6a" opacity="0.6"/>
+    <rect x="8" y="17" width="32" height="6" fill="#3a8abf" opacity="0.4" rx="2"/>
+    <!-- conning tower stub on stern -->
+    <rect x="16" y="0" width="16" height="6" fill="#3a6a8e" rx="2"/>
+    <g class="hit-marker">
+      <line x1="4"  y1="6"  x2="38" y2="34" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+      <line x1="38" y1="6"  x2="4"  y2="34" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+    </g>
+    <line x1="40" y1="4" x2="40" y2="36" stroke="#2a4a6a" stroke-width="1.5"/>
+  </g>
+
+  <!-- Segment 1 — mid body -->
+  <g class="segment" id="seg-1" data-index="1">
+    <rect class="seg-body" x="40" y="4" width="40" height="32" rx="0"/>
+    <circle cx="52" cy="12" r="2" fill="#2a4a6a" opacity="0.6"/>
+    <circle cx="52" cy="28" r="2" fill="#2a4a6a" opacity="0.6"/>
+    <circle cx="68" cy="12" r="2" fill="#2a4a6a" opacity="0.6"/>
+    <circle cx="68" cy="28" r="2" fill="#2a4a6a" opacity="0.6"/>
+    <rect x="40" y="17" width="40" height="6" fill="#3a8abf" opacity="0.4"/>
+    <g class="hit-marker">
+      <line x1="42" y1="6"  x2="78" y2="34" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+      <line x1="78" y1="6"  x2="42" y2="34" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+    </g>
+    <line x1="40"  y1="4" x2="40"  y2="36" stroke="#2a4a6a" stroke-width="1.5"/>
+    <line x1="80" y1="4" x2="80" y2="36" stroke="#2a4a6a" stroke-width="1.5"/>
+  </g>
+
+  <!-- Segment 2 — bow -->
+  <g class="segment" id="seg-2" data-index="2">
+    <path class="seg-bow"
+          d="M 80,4 H 108 Q 118,4 118,20 Q 118,36 108,36 H 80 Z"/>
+    <circle cx="86" cy="12" r="2" fill="#2a4a6a" opacity="0.6"/>
+    <circle cx="86" cy="28" r="2" fill="#2a4a6a" opacity="0.6"/>
+    <circle cx="106" cy="12" r="2" fill="#2a4a6a" opacity="0.6"/>
+    <circle cx="106" cy="28" r="2" fill="#2a4a6a" opacity="0.6"/>
+    <rect x="80" y="17" width="32" height="6" fill="#3a8abf" opacity="0.4"/>
+    <g class="hit-marker">
+      <line x1="82"  y1="6"  x2="116" y2="34" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+      <line x1="116" y1="6"  x2="82"  y2="34" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+    </g>
+  </g>
+
+</svg>

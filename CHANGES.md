@@ -57,3 +57,28 @@ Added a utility component function `resetElement` that clears all child elements
 ### Plain English Summary
 
 Wrapped the two playground sections inside a `playground-container` element styled as a flex row to place the Player and Computer boards side-by-side inside the main section container.
+
+---
+
+## Request #6 — 2026-09-27
+
+**Technical Summary:** Created 5 ship SVG assets for the battleship game.
+
+**Modified files:**
+
+- `src/assets/ship-2.svg` — Patrol Boat, 2 segments
+- `src/assets/ship-3.svg` — Submarine, 3 segments (rounded hull style)
+- `src/assets/ship-cruiser.svg` — Cruiser, 3 segments (angular hull style)
+- `src/assets/ship-4.svg` — Destroyer, 4 segments
+- `src/assets/ship-5.svg` — Aircraft Carrier, 5 segments
+
+**Logic changes:**
+
+- Each SVG uses `<g class="segment" id="seg-N">` for per-cell hit detection
+- CSS class `hit` on a segment triggers red fill + white X marker
+- CSS class `vertical` on `<svg>` root rotates the entire ship 90°
+- `data-size` attribute on `<svg>` root exposes ship size to JS
+
+**Why:** Ships needed to be visually distinct by type and support independent per-cell damage marking for the game's attack-phase logic.
+
+**Plain English:** Five naval ship icons were created, one per ship type. Each ship is divided into independent sections that can be individually marked as "hit" by toggling a CSS class. Ships can also be rotated between horizontal and vertical to match how they were placed on the board.
