@@ -82,3 +82,28 @@ Wrapped the two playground sections inside a `playground-container` element styl
 **Why:** Ships needed to be visually distinct by type and support independent per-cell damage marking for the game's attack-phase logic.
 
 **Plain English:** Five naval ship icons were created, one per ship type. Each ship is divided into independent sections that can be individually marked as "hit" by toggling a CSS class. Ships can also be rotated between horizontal and vertical to match how they were placed on the board.
+
+---
+
+## Request #7 — 2026-10-01
+
+- **Technical Summary**: Implemented predetermined ship placements for player and computer instances in `src/mockLogic.js`.
+- **Modified Files**:
+  - `src/mockLogic.js`: Created player (`p`) and computer (`c`) `Player` instances, invoked `placeShip` for standard ship lengths (5, 4, 3, 3, 2) at non-overlapping valid coordinates, and exported both instances.
+
+### Plain English Summary
+
+Populated `mockLogic.js` with predetermined valid ship positions for both player and computer boards using lengths 5, 4, 3, 3, and 2, and exported the player and computer objects for integration testing.
+
+---
+
+## Request #8 — 2026-10-01
+
+- **Technical Summary**: Added optional `player` parameter to `createBoardGrid(player)` and updated invocation in `gameInitiator.js`.
+- **Modified Files**:
+  - `src/ui/components/grid.js`: Updated `createBoardGrid` function signature to accept `player` and conditionally add `computer-cell-button` class to cell buttons if `player === "c"`.
+  - `src/logic/gameInitiator.js`: Updated `createBoardGrid()` invocation for `computerGameboard` to pass `"c"`.
+
+### Plain English Summary
+
+Updated `createBoardGrid` to accept a `player` parameter so that buttons on the computer's board grid receive the `computer-cell-button` CSS class when `"c"` is passed, while leaving player and default board grids unchanged.

@@ -133,7 +133,7 @@ describe("Board Functionalities", () => {
       gameboard.receiveAttack([4, 0]);
       gameboard.receiveAttack([4, 1]);
 
-      expect(gameboard.allShipsStatus).toBeTruthy();
+      expect(gameboard.AllShipsStatus).toBeTruthy();
     });
   });
 });

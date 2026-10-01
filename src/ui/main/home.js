@@ -1,10 +1,9 @@
-import { initiateGame } from "../../controller.js";
+import { initiateGame } from "../../logic/gameInitiator.js";
 import { createBoardGrid } from "../components/grid.js";
 import { resetElement } from "../components/resetElement.js";
 // ships assets
 import shipTwo from "../../../assets/ship-2.svg";
 import shipThree from "../../../assets/ship-3.svg";
-import shipThreeCruiser from "../../../assets/ship-3-cruiser.svg";
 import shipFour from "../../../assets/ship-4.svg";
 import shipFive from "../../../assets/ship-5.svg";
 
@@ -38,7 +37,7 @@ export function renderHome() {
   shipsGrid.appendChild(axisBtnContainer);
 
   // create same element with a loop for each ship size
-  const shipSVGs = [shipTwo, shipThree, shipThreeCruiser, shipFour, shipFive];
+  const shipSVGs = [shipTwo, shipThree, shipFour, shipFive];
   shipSVGs.forEach((shipSVG, i) => {
     const svgDiv = document.createElement("div");
     svgDiv.innerHTML = shipSVG;

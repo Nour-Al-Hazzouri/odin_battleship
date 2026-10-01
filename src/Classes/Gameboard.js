@@ -14,7 +14,7 @@ class Gameboard {
   get Board() {
     return this.#board;
   }
-  get allShipsStatus() {
+  get AllShipsStatus() {
     return this.#allShipsSunk;
   }
   #reportAllSunkShips() {

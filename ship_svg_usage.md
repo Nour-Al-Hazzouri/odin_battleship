@@ -2,13 +2,12 @@
 
 ## Files
 
-| File                 | Ship Name        | Size | Segments                                      |
-| -------------------- | ---------------- | ---- | --------------------------------------------- |
-| [`ship-2.svg`]       | Patrol Boat      | 2    | `seg-0` (stern), `seg-1` (bow)                |
-| [`ship-3.svg`]       | Submarine        | 3    | `seg-0` (stern), `seg-1` (mid), `seg-2` (bow) |
-| [`ship-cruiser.svg`] | Cruiser          | 3    | `seg-0` (stern), `seg-1` (mid), `seg-2` (bow) |
-| [`ship-4.svg`]       | Destroyer        | 4    | `seg-0`–`seg-3`                               |
-| [`ship-5.svg`]       | Aircraft Carrier | 5    | `seg-0`–`seg-4`                               |
+| File           | Ship Name        | Size | Segments                                      |
+| -------------- | ---------------- | ---- | --------------------------------------------- |
+| [`ship-2.svg`] | Patrol Boat      | 2    | `seg-0` (stern), `seg-1` (bow)                |
+| [`ship-3.svg`] | Submarine        | 3    | `seg-0` (stern), `seg-1` (mid), `seg-2` (bow) |
+| [`ship-4.svg`] | Destroyer        | 4    | `seg-0`–`seg-3`                               |
+| [`ship-5.svg`] | Aircraft Carrier | 5    | `seg-0`–`seg-4`                               |
 
 ---
 

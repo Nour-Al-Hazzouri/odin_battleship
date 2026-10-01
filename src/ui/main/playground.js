@@ -1,7 +1,6 @@
-import { createBoardGrid } from "../components/grid.js";
 import { resetElement } from "../components/resetElement.js";
 
-export function renderPlayground() {
+export function renderPlayground(playerGameboard, computerGameboard) {
   const main = document.querySelector("main");
 
   resetElement(main);
@@ -13,7 +12,7 @@ export function renderPlayground() {
   const playerTitle = document.createElement("h2");
   playerTitle.textContent = "Player";
 
-  const playerBoard = createBoardGrid();
+  const playerBoard = playerGameboard;
 
   const playerStatus = document.createElement("span");
   playerStatus.classList.add("status-text");
@@ -29,7 +28,7 @@ export function renderPlayground() {
   const computerTitle = document.createElement("h2");
   computerTitle.textContent = "Computer";
 
-  const computerBoard = createBoardGrid();
+  const computerBoard = computerGameboard;
 
   const computerStatus = document.createElement("span");
   computerStatus.classList.add("status-text");
