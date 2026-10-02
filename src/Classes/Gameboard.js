@@ -78,6 +78,7 @@ class Gameboard {
     if (!this.#validateCoordinates(x, y))
       throw new Error("out-of-bound coordinates are not acceptable");
     if (!attackedSlot.HitStatus) attackedSlot.hit();
+    else throw new Error("position already attacked");
     if (attackedSlot.Ship) {
       attackedSlot.Ship.hit();
       attackedSlot.Ship.isSunk();
