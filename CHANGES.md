@@ -87,18 +87,6 @@ Wrapped the two playground sections inside a `playground-container` element styl
 
 ## Request #7 — 2026-10-01
 
-- **Technical Summary**: Implemented predetermined ship placements for player and computer instances in `src/mockLogic.js`.
-- **Modified Files**:
-  - `src/mockLogic.js`: Created player (`p`) and computer (`c`) `Player` instances, invoked `placeShip` for standard ship lengths (5, 4, 3, 3, 2) at non-overlapping valid coordinates, and exported both instances.
-
-### Plain English Summary
-
-Populated `mockLogic.js` with predetermined valid ship positions for both player and computer boards using lengths 5, 4, 3, 3, and 2, and exported the player and computer objects for integration testing.
-
----
-
-## Request #8 — 2026-10-01
-
 - **Technical Summary**: Added optional `player` parameter to `createBoardGrid(player)` and updated invocation in `gameInitiator.js`.
 - **Modified Files**:
   - `src/ui/components/grid.js`: Updated `createBoardGrid` function signature to accept `player` and conditionally add `computer-cell-button` class to cell buttons if `player === "c"`.
@@ -106,4 +94,4 @@ Populated `mockLogic.js` with predetermined valid ship positions for both player
 
 ### Plain English Summary
 
-Updated `createBoardGrid` to accept a `player` parameter so that buttons on the computer's board grid receive the `computer-cell-button` CSS class when `"c"` is passed, while leaving player and default board grids unchanged.
+---
