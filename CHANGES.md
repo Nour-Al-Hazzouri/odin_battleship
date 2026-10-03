@@ -95,3 +95,25 @@ Wrapped the two playground sections inside a `playground-container` element styl
 ### Plain English Summary
 
 ---
+
+## Request #8 — 2026-10-03
+
+- **Technical Summary**: Added `setTimeout` logic in `attackGrid` in `src/logic/gameController.js` to execute a delayed random computer turn against the player board.
+- **Modified Files**:
+  - `src/logic/gameController.js`: Updated `attackGrid` function to set `setTimeout` for 2 seconds after computer board cell is marked, selecting random coordinates (0-9) to attack the player board and mark the corresponding player grid cell with "X" or "🔥".
+
+### Plain English Summary
+
+Updated the game controller so that after a player attacks a cell on the computer's grid and marks it, a 2-second timeout triggers a random counter-attack by the computer on the player's grid, updating the player board with the appropriate mark ("X" or "🔥").
+
+---
+
+## Request #9 — 2026-10-03
+
+- **Technical Summary**: Fixed `querySelector` string pattern in `src/logic/gameController.js`.
+- **Modified Files**:
+  - `src/logic/gameController.js`: Updated `document.querySelector` string from `[data-coordinates="[${randomX},${randomY}]"]` to `[data-coordinates="[${randomX}, ${randomY}]"]` to match the exact spacing formatted in `src/ui/components/grid.js`.
+
+### Plain English Summary
+
+Fixed the DOM attribute selector space formatting in the attack controller to correctly match and locate player grid button elements.
