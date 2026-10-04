@@ -14,7 +14,7 @@ class Gameboard {
   get Board() {
     return this.#board;
   }
-  get allShipsStatus() {
+  get AllShipsStatus() {
     return this.#allShipsSunk;
   }
   #reportAllSunkShips() {
@@ -49,9 +49,7 @@ class Gameboard {
       // check if ship bumped into another ship
       const targetCell = this.#board[currentX][currentY].Ship;
       const isCellOccupied = targetCell !== null;
-      if (isCellOccupied) {
-        return false;
-      }
+      if (isCellOccupied) return false;
     }
     return true;
   }
@@ -80,6 +78,7 @@ class Gameboard {
     if (!this.#validateCoordinates(x, y))
       throw new Error("out-of-bound coordinates are not acceptable");
     if (!attackedSlot.HitStatus) attackedSlot.hit();
+    else throw new Error("position already attacked");
     if (attackedSlot.Ship) {
       attackedSlot.Ship.hit();
       attackedSlot.Ship.isSunk();

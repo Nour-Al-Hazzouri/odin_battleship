@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 120 40"
+     width="120" height="40"
+     class="ship ship-3"
+     data-size="3"
+     role="img"
+     aria-label="Submarine (size 3)">
+
+  <style>
+    .segment { cursor: pointer; }
+    .seg-body  { fill: #4a7c9e; }
+    .seg-bow   { fill: #5a9abf; }
+    .seg-stern { fill: #3a6a8e; }
+
+    .segment.hit .seg-body,
+    .segment.hit .seg-bow,
+    .segment.hit .seg-stern {
+      fill: #c0392b;
+      filter: drop-shadow(0 0 4px #ff6b6b);
+    }
+    .segment.hit .hit-marker { display: block; }
+    .hit-marker { display: none; }
+
+    .ship.vertical {
+      transform: rotate(90deg);
+      transform-origin: 0px 0px;
+    }
+  </style>
+
+  <!-- Segment 0 — stern -->
+  <g class="segment" id="seg-0" data-index="0">
+    <path class="seg-stern" d="M 12,4 H 40 V 36 H 12 Q 2,36 2,20 Q 2,4 12,4 Z"/>
+    <!-- inner panel -->
+    <rect x="10" y="10" width="26" height="20" fill="#2a5a7e" opacity="0.3" rx="2"/>
+    <!-- portholes -->
+    <circle cx="18" cy="20" r="3" fill="none" stroke="#2a4a6a" stroke-width="1.5" opacity="0.7"/>
+    <circle cx="30" cy="20" r="3" fill="none" stroke="#2a4a6a" stroke-width="1.5" opacity="0.7"/>
+    <!-- waterline -->
+    <line x1="4" y1="28" x2="40" y2="28" stroke="#2a4a6a" stroke-width="1" opacity="0.5"/>
+    <g class="hit-marker">
+      <line x1="5"  y1="7"  x2="37" y2="33" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+      <line x1="37" y1="7"  x2="5"  y2="33" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+    </g>
+    <line x1="40" y1="4" x2="40" y2="36" stroke="#1e3a5a" stroke-width="1.5"/>
+  </g>
+
+  <!-- Segment 1 — mid -->
+  <g class="segment" id="seg-1" data-index="1">
+    <rect class="seg-body" x="40" y="4" width="40" height="32"/>
+    <!-- inner panel -->
+    <rect x="44" y="10" width="32" height="20" fill="#2a5a7e" opacity="0.3" rx="2"/>
+    <!-- conning tower (inside hull height) -->
+    <rect x="52" y="6" width="16" height="10" fill="#3a6a8e" rx="2"/>
+    <rect x="56" y="5" width="8"  height="5"  fill="#2a5070" rx="1"/>
+    <!-- portholes below tower -->
+    <circle cx="48" cy="26" r="2.5" fill="none" stroke="#2a4a6a" stroke-width="1.5" opacity="0.7"/>
+    <circle cx="72" cy="26" r="2.5" fill="none" stroke="#2a4a6a" stroke-width="1.5" opacity="0.7"/>
+    <!-- waterline -->
+    <line x1="40" y1="28" x2="80" y2="28" stroke="#2a4a6a" stroke-width="1" opacity="0.5"/>
+    <g class="hit-marker">
+      <line x1="43" y1="7"  x2="77" y2="33" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+      <line x1="77" y1="7"  x2="43" y2="33" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+    </g>
+    <line x1="40"  y1="4" x2="40"  y2="36" stroke="#1e3a5a" stroke-width="1.5"/>
+    <line x1="80" y1="4" x2="80" y2="36" stroke="#1e3a5a" stroke-width="1.5"/>
+  </g>
+
+  <!-- Segment 2 — bow -->
+  <g class="segment" id="seg-2" data-index="2">
+    <path class="seg-bow" d="M 80,4 H 108 Q 118,4 118,20 Q 118,36 108,36 H 80 Z"/>
+    <!-- inner panel -->
+    <rect x="84" y="10" width="26" height="20" fill="#2a5a7e" opacity="0.3" rx="2"/>
+    <!-- portholes -->
+    <circle cx="90" cy="20" r="3" fill="none" stroke="#2a4a6a" stroke-width="1.5" opacity="0.7"/>
+    <circle cx="102" cy="20" r="3" fill="none" stroke="#2a4a6a" stroke-width="1.5" opacity="0.7"/>
+    <!-- waterline -->
+    <line x1="80" y1="28" x2="116" y2="28" stroke="#2a4a6a" stroke-width="1" opacity="0.5"/>
+    <g class="hit-marker">
+      <line x1="83"  y1="7"  x2="115" y2="33" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+      <line x1="115" y1="7"  x2="83"  y2="33" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+    </g>
+  </g>
+
+</svg>

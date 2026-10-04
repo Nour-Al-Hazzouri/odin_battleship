@@ -96,6 +96,12 @@ describe("Board Functionalities", () => {
       expect(board[9][9].HitStatus).toBeTruthy();
       expect(board[9][9].Ship).toBeNull();
     });
+    it("should throw an error when attacking an already attacked position", () => {
+      gameboard.receiveAttack([2, 3]);
+      expect(() => gameboard.receiveAttack([2, 3])).toThrow(
+        new Error("position already attacked"),
+      );
+    });
     it("should report when all ships have been sunk", () => {
       // 5 ships of standard sizes (5, 4, 3, 3, 2) placed non-overlapping
       gameboard.placeShip(5, [0, 0], "h"); // (0,0) to (0,4)
@@ -133,7 +139,7 @@ describe("Board Functionalities", () => {
       gameboard.receiveAttack([4, 0]);
       gameboard.receiveAttack([4, 1]);
 
-      expect(gameboard.allShipsStatus).toBeTruthy();
+      expect(gameboard.AllShipsStatus).toBeTruthy();
     });
   });
 });

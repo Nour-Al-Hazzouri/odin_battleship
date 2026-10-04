@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 160 40"
+     width="160" height="40"
+     class="ship ship-4"
+     data-size="4"
+     role="img"
+     aria-label="Destroyer (size 4)">
+
+  <style>
+    .segment { cursor: pointer; }
+    .seg-body  { fill: #4a7c9e; }
+    .seg-bow   { fill: #5a9abf; }
+    .seg-stern { fill: #3a6a8e; }
+
+    .segment.hit .seg-body,
+    .segment.hit .seg-bow,
+    .segment.hit .seg-stern {
+      fill: #c0392b;
+      filter: drop-shadow(0 0 4px #ff6b6b);
+    }
+    .segment.hit .hit-marker { display: block; }
+    .hit-marker { display: none; }
+
+    .ship.vertical {
+      transform: rotate(90deg);
+      transform-origin: 0px 0px;
+    }
+  </style>
+
+  <!-- Segment 0 — stern -->
+  <g class="segment" id="seg-0" data-index="0">
+    <path class="seg-stern" d="M 12,4 H 40 V 36 H 12 Q 2,36 2,20 Q 2,4 12,4 Z"/>
+    <rect x="10" y="10" width="26" height="20" fill="#2a5a7e" opacity="0.3" rx="2"/>
+    <circle cx="18" cy="20" r="3" fill="none" stroke="#2a4a6a" stroke-width="1.5" opacity="0.7"/>
+    <circle cx="30" cy="20" r="3" fill="none" stroke="#2a4a6a" stroke-width="1.5" opacity="0.7"/>
+    <line x1="4" y1="28" x2="40" y2="28" stroke="#2a4a6a" stroke-width="1" opacity="0.5"/>
+    <!-- aft gun turret (inside bounds) -->
+    <rect x="12" y="14" width="14" height="6" fill="#2a5070" rx="2"/>
+    <rect x="24" y="16" width="8"  height="3" fill="#1a3050" rx="1"/>
+    <g class="hit-marker">
+      <line x1="5"  y1="7"  x2="37" y2="33" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+      <line x1="37" y1="7"  x2="5"  y2="33" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+    </g>
+    <line x1="40" y1="4" x2="40" y2="36" stroke="#1e3a5a" stroke-width="1.5"/>
+  </g>
+
+  <!-- Segment 1 — mid-stern -->
+  <g class="segment" id="seg-1" data-index="1">
+    <rect class="seg-body" x="40" y="4" width="40" height="32"/>
+    <rect x="44" y="10" width="32" height="20" fill="#2a5a7e" opacity="0.3" rx="2"/>
+    <!-- bridge superstructure (inside) -->
+    <rect x="48" y="6" width="24" height="14" fill="#3a6a8e" rx="2"/>
+    <rect x="52" y="5" width="16" height="6"  fill="#2a5070" rx="1"/>
+    <!-- bridge windows -->
+    <rect x="51" y="8"  width="5" height="3" fill="#aad4ee" opacity="0.6" rx="1"/>
+    <rect x="59" y="8"  width="5" height="3" fill="#aad4ee" opacity="0.6" rx="1"/>
+    <rect x="67" y="8"  width="5" height="3" fill="#aad4ee" opacity="0.6" rx="1"/>
+    <line x1="40" y1="28" x2="80" y2="28" stroke="#2a4a6a" stroke-width="1" opacity="0.5"/>
+    <g class="hit-marker">
+      <line x1="43" y1="7"  x2="77" y2="33" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+      <line x1="77" y1="7"  x2="43" y2="33" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+    </g>
+    <line x1="40"  y1="4" x2="40"  y2="36" stroke="#1e3a5a" stroke-width="1.5"/>
+    <line x1="80" y1="4" x2="80" y2="36" stroke="#1e3a5a" stroke-width="1.5"/>
+  </g>
+
+  <!-- Segment 2 — mid-bow -->
+  <g class="segment" id="seg-2" data-index="2">
+    <rect class="seg-body" x="80" y="4" width="40" height="32"/>
+    <rect x="84" y="10" width="32" height="20" fill="#2a5a7e" opacity="0.3" rx="2"/>
+    <!-- funnel stack (inside) -->
+    <rect x="92" y="6" width="10" height="16" fill="#2a5070" rx="2"/>
+    <rect x="95" y="5" width="4"  height="4"  fill="#1a3050" rx="1"/>
+    <!-- portholes -->
+    <circle cx="88"  cy="26" r="2.5" fill="none" stroke="#2a4a6a" stroke-width="1.5" opacity="0.7"/>
+    <circle cx="114" cy="26" r="2.5" fill="none" stroke="#2a4a6a" stroke-width="1.5" opacity="0.7"/>
+    <line x1="80" y1="28" x2="120" y2="28" stroke="#2a4a6a" stroke-width="1" opacity="0.5"/>
+    <g class="hit-marker">
+      <line x1="83"  y1="7"  x2="117" y2="33" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+      <line x1="117" y1="7"  x2="83"  y2="33" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+    </g>
+    <line x1="80"  y1="4" x2="80"  y2="36" stroke="#1e3a5a" stroke-width="1.5"/>
+    <line x1="120" y1="4" x2="120" y2="36" stroke="#1e3a5a" stroke-width="1.5"/>
+  </g>
+
+  <!-- Segment 3 — bow -->
+  <g class="segment" id="seg-3" data-index="3">
+    <path class="seg-bow" d="M 120,4 H 148 Q 158,4 158,20 Q 158,36 148,36 H 120 Z"/>
+    <rect x="124" y="10" width="26" height="20" fill="#2a5a7e" opacity="0.3" rx="2"/>
+    <!-- bow gun (inside) -->
+    <rect x="130" y="14" width="14" height="6" fill="#2a5070" rx="2"/>
+    <rect x="142" y="16" width="10" height="3" fill="#1a3050" rx="1"/>
+    <circle cx="128" cy="20" r="3" fill="none" stroke="#2a4a6a" stroke-width="1.5" opacity="0.7"/>
+    <line x1="120" y1="28" x2="156" y2="28" stroke="#2a4a6a" stroke-width="1" opacity="0.5"/>
+    <g class="hit-marker">
+      <line x1="123" y1="7"  x2="155" y2="33" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+      <line x1="155" y1="7"  x2="123" y2="33" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+    </g>
+  </g>
+
+</svg>

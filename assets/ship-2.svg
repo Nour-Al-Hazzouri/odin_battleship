@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 80 40"
+     width="80" height="40"
+     class="ship ship-2"
+     data-size="2"
+     role="img"
+     aria-label="Patrol Boat (size 2)">
+
+  <style>
+    .segment { cursor: pointer; }
+    .seg-body  { fill: #4a7c9e; }
+    .seg-bow   { fill: #5a9abf; }
+    .seg-stern { fill: #3a6a8e; }
+
+    .segment.hit .seg-body,
+    .segment.hit .seg-bow,
+    .segment.hit .seg-stern {
+      fill: #c0392b;
+      filter: drop-shadow(0 0 4px #ff6b6b);
+    }
+    .segment.hit .hit-marker { display: block; }
+    .hit-marker { display: none; }
+
+    .ship.vertical {
+      transform: rotate(90deg);
+      transform-origin: 0px 0px;
+    }
+  </style>
+
+  <!-- Segment 0 — stern -->
+  <g class="segment" id="seg-0" data-index="0">
+    <path class="seg-stern" d="M 12,4 H 40 V 36 H 12 Q 2,36 2,20 Q 2,4 12,4 Z"/>
+    <!-- inner panel -->
+    <rect x="10" y="10" width="26" height="20" fill="#2a5a7e" opacity="0.3" rx="2"/>
+    <!-- portholes -->
+    <circle cx="18" cy="20" r="3" fill="none" stroke="#2a4a6a" stroke-width="1.5" opacity="0.7"/>
+    <circle cx="30" cy="20" r="3" fill="none" stroke="#2a4a6a" stroke-width="1.5" opacity="0.7"/>
+    <!-- waterline stripe -->
+    <line x1="4" y1="28" x2="40" y2="28" stroke="#2a4a6a" stroke-width="1" opacity="0.5"/>
+    <!-- hit marker -->
+    <g class="hit-marker">
+      <line x1="5"  y1="7"  x2="37" y2="33" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+      <line x1="37" y1="7"  x2="5"  y2="33" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+    </g>
+    <!-- segment divider -->
+    <line x1="40" y1="4" x2="40" y2="36" stroke="#1e3a5a" stroke-width="1.5"/>
+  </g>
+
+  <!-- Segment 1 — bow -->
+  <g class="segment" id="seg-1" data-index="1">
+    <path class="seg-bow" d="M 40,4 H 68 Q 78,4 78,20 Q 78,36 68,36 H 40 Z"/>
+    <!-- inner panel -->
+    <rect x="44" y="10" width="26" height="20" fill="#2a5a7e" opacity="0.3" rx="2"/>
+    <!-- portholes -->
+    <circle cx="50" cy="20" r="3" fill="none" stroke="#2a4a6a" stroke-width="1.5" opacity="0.7"/>
+    <circle cx="62" cy="20" r="3" fill="none" stroke="#2a4a6a" stroke-width="1.5" opacity="0.7"/>
+    <!-- waterline stripe -->
+    <line x1="40" y1="28" x2="76" y2="28" stroke="#2a4a6a" stroke-width="1" opacity="0.5"/>
+    <!-- hit marker -->
+    <g class="hit-marker">
+      <line x1="43" y1="7"  x2="75" y2="33" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+      <line x1="75" y1="7"  x2="43" y2="33" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+    </g>
+  </g>
+
+</svg>

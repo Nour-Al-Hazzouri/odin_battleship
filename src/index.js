@@ -1,3 +1,7 @@
-import Gameboard from "./Classes/Gameboard.js";
+import "./styles.css";
+import { renderHome } from "./ui/main/home.js";
 
-const gameboard = new Gameboard();
+const homeButton = document.querySelector("#home");
+homeButton.addEventListener("click", renderHome);
+
+renderHome();
