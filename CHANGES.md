@@ -117,3 +117,28 @@ Updated the game controller so that after a player attacks a cell on the compute
 ### Plain English Summary
 
 Fixed the DOM attribute selector space formatting in the attack controller to correctly match and locate player grid button elements.
+
+---
+
+## Request #10 — 2026-10-04
+
+- **Technical Summary**: Replaced `alert()` win announcements in `src/logic/gameController.js` with modal `<dialog>` component returning to home view upon closing.
+- **Modified Files**:
+  - `src/logic/gameController.js`: Replaced browser `alert()` with `showGameOverDialog()` modal `<dialog>` containing a Close button that calls `renderHome()`. Fixed win condition checks to prevent computer turn execution after player victory.
+
+### Plain English Summary
+
+Replaced the native browser alert boxes shown when a game ends with a dialog window containing a Close button that redirects the player back to the main home screen.
+
+---
+
+## Request #11 — 2026-10-04
+
+- **Technical Summary**: Added status text class identifiers to playground status spans and implemented turn text updating logic in game controller.
+- **Modified Files**:
+  - `src/ui/main/playground.js`: Added `player-status-text` and `computer-status-text` classes to status `<span>` elements.
+  - `src/logic/gameController.js`: Added DOM text updates to display turn indicator messages ("Your turn...", "Computer's turn...") on start and turn transitions.
+
+### Plain English Summary
+
+Added CSS classes to identify the status text spans for both player and computer sections, and updated the turn handling logic to display whose turn it is during game start and turn transitions.

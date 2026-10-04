@@ -1,3 +1,5 @@
+import { renderHome } from "../ui/main/home.js";
+
 export function startBattleship(player, computer) {
   // start by setting both boards
   let playerPlacedShips = 0;
@@ -15,6 +17,13 @@ export function startBattleship(player, computer) {
   gridButtons.forEach((button) => {
     button.addEventListener("click", (e) => attackGrid(player, computer, e));
   });
+
+  const playerStatus = document.querySelector(".player-status-text");
+  const computerStatus = document.querySelector(".computer-status-text");
+  if (playerStatus && computerStatus) {
+    playerStatus.textContent = "";
+    computerStatus.textContent = "Player's turn...";
+  }
 }
 
 // place ships randomly
@@ -37,6 +46,9 @@ function boardPlaceShips(boardPlayer, size) {
 
 // detect each attacked cell to render correct information
 function attackGrid(player, computer, e) {
+  const playerStatus = document.querySelector(".player-status-text");
+  const computerStatus = document.querySelector(".computer-status-text");
+
   const target = e.target;
   const coordinates = JSON.parse(e.target.dataset.coordinates);
   const [x, y] = [coordinates[0], coordinates[1]];
@@ -46,20 +58,70 @@ function attackGrid(player, computer, e) {
   else target.textContent = "🔥";
   const computerGrid = document.querySelector(".computer-grid");
   computerGrid.style.pointerEvents = "none";
+
+  if (playerStatus && computerStatus) {
+    playerStatus.textContent = "Computer's turn...";
+    computerStatus.textContent = "";
+  }
+
+  if (computer.Gameboard.AllShipsStatus) {
+    showGameOverDialog("Player has won!");
+    return;
+  }
   // wait 1.5s before computer's attack on player's board
   setTimeout(() => {
-    const randomX = Math.floor(Math.random() * 10);
-    const randomY = Math.floor(Math.random() * 10);
-    // TODO: add a try catch block for same position attack errors
-    player.Gameboard.receiveAttack([randomX, randomY]);
-    const playerCell = document.querySelector(
-      `[data-coordinates="[${randomX}, ${randomY}]"].player-cell-button`,
-    );
-    if (playerCell) {
-      if (player.Board[randomX][randomY].Ship === null)
-        playerCell.textContent = "X";
-      else playerCell.textContent = "🔥";
+    let attackSuccessful = false;
+    while (!attackSuccessful) {
+      const randomX = Math.floor(Math.random() * 10);
+      const randomY = Math.floor(Math.random() * 10);
+      try {
+        player.Gameboard.receiveAttack([randomX, randomY]);
+        const playerCell = document.querySelector(
+          `[data-coordinates="[${randomX}, ${randomY}]"].player-cell-button`,
+        );
+        if (playerCell) {
+          if (player.Board[randomX][randomY].Ship === null)
+            playerCell.textContent = "X";
+          else playerCell.textContent = "🔥";
+        }
+        computerGrid.style.pointerEvents = "auto";
+        attackSuccessful = true;
+
+        if (playerStatus && computerStatus) {
+          playerStatus.textContent = "";
+          computerStatus.textContent = "Player's turn...";
+        }
+
+        if (player.Gameboard.AllShipsStatus) {
+          showGameOverDialog("Computer has won!");
+          return;
+        }
+      } catch (e) {
+        console.log("Spot already shot. Choosing another...");
+        continue;
+      }
     }
-    computerGrid.style.pointerEvents = "auto";
   }, 1500);
+}
+
+function showGameOverDialog(message) {
+  const dialog = document.createElement("dialog");
+  dialog.classList.add("game-over-dialog");
+
+  const msgText = document.createElement("p");
+  msgText.textContent = message;
+  dialog.appendChild(msgText);
+
+  const closeButton = document.createElement("button");
+  closeButton.textContent = "Close";
+  closeButton.addEventListener("click", () => {
+    dialog.close();
+    dialog.remove();
+    renderHome();
+  });
+  dialog.appendChild(closeButton);
+
+  const main = document.querySelector("main");
+  main.appendChild(dialog);
+  dialog.showModal();
 }

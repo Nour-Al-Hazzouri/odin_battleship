@@ -15,7 +15,7 @@ export function renderPlayground(playerGameboard, computerGameboard) {
   const playerBoard = playerGameboard;
 
   const playerStatus = document.createElement("span");
-  playerStatus.classList.add("status-text");
+  playerStatus.classList.add("status-text", "player-status-text");
 
   playerSection.appendChild(playerTitle);
   playerSection.appendChild(playerBoard);
@@ -31,7 +31,7 @@ export function renderPlayground(playerGameboard, computerGameboard) {
   const computerBoard = computerGameboard;
 
   const computerStatus = document.createElement("span");
-  computerStatus.classList.add("status-text");
+  computerStatus.classList.add("status-text", "computer-status-text");
 
   computerSection.appendChild(computerTitle);
   computerSection.appendChild(computerBoard);
