@@ -142,3 +142,18 @@ Replaced the native browser alert boxes shown when a game ends with a dialog win
 ### Plain English Summary
 
 Added CSS classes to identify the status text spans for both player and computer sections, and updated the turn handling logic to display whose turn it is during game start and turn transitions.
+
+---
+
+## Request #12 — 2026-10-04
+
+- **Technical Summary**: Applied minimalist modern dark mode neon styling and updated ship list to 5 ships.
+- **Modified Files**:
+  - `src/ui/main/home.js`: Appended a duplicate of `shipThree` into the `shipSVGs` array.
+    - _Why_: The game rules require 5 ships while only 4 distinct SVG assets are provided (duplicating size-3 ship for cruiser/submarine).
+  - `src/styles.css`: Implemented dark neon design system, 40px × 40px board cell dimensions, 400px ship dock container, custom `:disabled` cell overrides, and neon glowing elements for header, footer, playground, status indicators, and modal dialogs.
+    - _Why_: Establish modern minimalist dark neon aesthetic, align board cells with 40px SVG segment sizes for future drag-and-drop functionality, and ensure clicked/disabled board cells retain high contrast and visual feedback without browser-default dimming.
+
+### Plain English Summary
+
+Updated the home setup screen to display all five fleet vessels and redesigned the entire application with a minimalist, modern dark mode featuring glowing neon cyan, red, and amber accents. Board cell dimensions were set to 40px to match the ship graphic segments for drag-and-drop positioning, and disabled buttons were customized to keep attacks and hits distinctly visible.
