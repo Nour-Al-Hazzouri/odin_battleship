@@ -37,7 +37,7 @@ export function renderHome() {
   shipsGrid.appendChild(axisBtnContainer);
 
   // create same element with a loop for each ship size
-  const shipSVGs = [shipTwo, shipThree, shipFour, shipFive];
+  const shipSVGs = [shipTwo, shipThree, shipThree, shipFour, shipFive];
   shipSVGs.forEach((shipSVG, i) => {
     const svgDiv = document.createElement("div");
     svgDiv.innerHTML = shipSVG;

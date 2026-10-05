@@ -1,39 +1,89 @@
 @import url("https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap");
-/* default styling */
+
+/* ==========================================================================
+   Design Tokens & Theme Variables
+   - Defines dark mode base surfaces, neon accents (cyan, red, amber), and 40px unit
+   ========================================================================== */
+:root {
+  --bg-primary: #0a0e17;
+  --bg-secondary: #0f172a;
+  --bg-surface: #111a2e;
+  --text-primary: #e2e8f0;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --neon-cyan: #00f0ff;
+  --neon-cyan-glow: rgba(0, 240, 255, 0.35);
+  --neon-cyan-subtle: rgba(0, 240, 255, 0.12);
+  --neon-red: #ff3366;
+  --neon-red-glow: rgba(255, 51, 102, 0.4);
+  --neon-amber: #ffb703;
+  --neon-amber-glow: rgba(255, 183, 3, 0.4);
+  --border-subtle: rgba(0, 240, 255, 0.15);
+  --cell-size: 40px; /* Matches 40px SVG ship segments for drag-and-drop */
+}
+
+/* ==========================================================================
+   Base & Reset
+   ========================================================================== */
+* {
+  box-sizing: border-box;
+}
+
 html,
 body {
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
   font-family: "Rubik", sans-serif;
+  height: 100%;
 }
 
-/* layout for main elements */
+/* Flex column ensures footer sticks to the bottom */
 body {
-  height: 100%;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
 }
 
+/* ==========================================================================
+   Header & Navigation
+   ========================================================================== */
 header {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  border-bottom: 1px solid black;
+  align-items: center;
+  padding: 16px 40px;
+  background-color: #080c14;
+  border-bottom: 1px solid var(--border-subtle);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
 }
 
-/* take up all available space for footer to stay on bottom */
+header h1 {
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #f8fafc;
+  text-shadow: 0 0 12px var(--neon-cyan-glow);
+}
+
+/* ==========================================================================
+   Main Content Layout
+   ========================================================================== */
 main {
   flex-grow: 1;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  padding: 20px;
+  padding: 30px 20px;
+  gap: 25px;
 }
 
-/* mother container of both grids */
+/* Container holding the ship dock and board side-by-side */
 .boards-container {
   display: flex;
   flex-direction: row;
@@ -43,80 +93,225 @@ main {
   width: 100%;
 }
 
-/* first section: ships panel */
+/* ==========================================================================
+   Ships Dock Section (Home Setup View)
+   ========================================================================== */
 .ships-section {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
+/* Sized to 400x400 to match the 10x10 board dimensions */
 .ships-grid {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 310px;
-  height: 310px;
-  border: 1px solid black;
-  padding: 10px;
+  width: 400px;
+  height: 400px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  box-shadow:
+    0 6px 24px rgba(0, 0, 0, 0.5),
+    0 0 15px rgba(0, 240, 255, 0.08);
+  padding: 16px;
   box-sizing: border-box;
 }
 
+/* Container for vertical/horizontal axis toggle button */
 .axis-btn-container {
   display: flex;
   justify-content: center;
-  margin-bottom: 10px;
+  width: 100%;
+  margin-bottom: 12px;
 }
 
+/* Fleet dock containing all 5 ship SVGs */
 .actual-ships-grid {
-  display: grid;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
   flex-grow: 1;
   width: 100%;
+  gap: 8px;
 }
 
-/* second section: 10x10 board panel */
+/* SVG wrapper styling with neon ship drop-shadows */
+.actual-ships-grid > div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    transform 0.2s ease,
+    filter 0.2s ease;
+  filter: drop-shadow(0 0 4px rgba(0, 240, 255, 0.25));
+}
+
+.actual-ships-grid > div:hover {
+  filter: drop-shadow(0 0 10px rgba(0, 240, 255, 0.5));
+}
+
+/* ==========================================================================
+   10x10 Battleship Board Grid
+   ========================================================================== */
 .board-section {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 15px;
+  gap: 16px;
 }
 
+/* 10 columns x 10 rows of 40px each (400px x 400px total) */
 .board-grid {
   display: grid;
-  grid-template-columns: repeat(10, 30px);
-  grid-template-rows: repeat(10, 30px);
-  gap: 1px;
+  grid-template-columns: repeat(10, var(--cell-size));
+  grid-template-rows: repeat(10, var(--cell-size));
+  gap: 0;
+  background-color: var(--bg-surface);
+  border: 1px solid var(--neon-cyan);
+  border-radius: 6px;
+  box-shadow:
+    0 0 20px var(--neon-cyan-glow),
+    0 8px 30px rgba(0, 0, 0, 0.6);
+  overflow: hidden;
 }
 
+/* Base styling for each 40px board cell button */
 .cell-btn {
-  width: 30px;
-  height: 30px;
+  width: var(--cell-size);
+  height: var(--cell-size);
+  padding: 0;
+  margin: 0;
+  background: var(--bg-surface);
+  border: 1px solid rgba(0, 240, 255, 0.12);
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 1.1rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+  cursor: pointer;
 }
 
+/* Hover effect on available cells */
+.cell-btn:not(:disabled):hover {
+  background-color: var(--neon-cyan-subtle);
+  border-color: var(--neon-cyan);
+  box-shadow: inset 0 0 8px var(--neon-cyan-glow);
+  z-index: 1;
+}
+
+/* Tactical crosshair hover on computer grid cells to attack */
+.computer-cell-button:not(:disabled):hover {
+  cursor: crosshair;
+  background-color: rgba(255, 51, 102, 0.12);
+  border-color: var(--neon-red);
+  box-shadow:
+    inset 0 0 8px var(--neon-red-glow),
+    0 0 8px var(--neon-red-glow);
+  z-index: 1;
+}
+
+/* Attacked / disabled cells: overrides browser default fade, keeps hit/miss contrast */
+.cell-btn:disabled {
+  opacity: 1;
+  cursor: not-allowed;
+  background-color: #080c14;
+  border-color: rgba(255, 255, 255, 0.08);
+  color: #38bdf8;
+  text-shadow: 0 0 8px rgba(56, 189, 248, 0.7);
+}
+
+/* Container for Reset and Randomize buttons */
 .controls-container {
   display: flex;
   flex-direction: row;
-  gap: 15px;
+  gap: 16px;
 }
 
-/* play button centered at bottom */
+/* ==========================================================================
+   Buttons (Minimalist Neon Design)
+   ========================================================================== */
+button {
+  background-color: var(--bg-secondary);
+  color: var(--neon-cyan);
+  border: 1px solid var(--neon-cyan);
+  border-radius: 4px;
+  padding: 8px 18px;
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 0 8px rgba(0, 240, 255, 0.15);
+}
+
+button:hover {
+  background-color: var(--neon-cyan-subtle);
+  box-shadow: 0 0 14px var(--neon-cyan-glow);
+  transform: translateY(-1px);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+/* Bottom centered Play button */
 .play-btn-container {
   display: flex;
   justify-content: center;
+  width: 100%;
 }
 
+.play-btn {
+  padding: 12px 42px;
+  font-size: 1rem;
+  letter-spacing: 3px;
+  font-weight: 700;
+  box-shadow: 0 0 18px var(--neon-cyan-glow);
+}
+
+.play-btn:hover {
+  box-shadow: 0 0 26px var(--neon-cyan-glow);
+}
+
+/* ==========================================================================
+   Footer
+   ========================================================================== */
 footer {
   margin-top: auto;
-  border-top: 1px solid black;
+  padding: 14px 20px;
+  background-color: #080c14;
+  border-top: 1px solid var(--border-subtle);
   text-align: center;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  letter-spacing: 1px;
 }
 
-/* playground page layout */
+footer p {
+  margin: 0;
+}
+
+/* ==========================================================================
+   Playground View (In-Game Battle Screen)
+   ========================================================================== */
 .playground-container {
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: flex-start;
+  gap: 40px;
   width: 100%;
 }
 
@@ -124,9 +319,83 @@ footer {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px;
+  gap: 16px;
+  padding: 24px;
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.5);
 }
 
-.player-section {
-  border-right: 1px solid black;
+.playground-section h2 {
+  margin: 0;
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+/* Player section: cyan neon theme */
+.player-section h2 {
+  color: var(--neon-cyan);
+  text-shadow: 0 0 10px var(--neon-cyan-glow);
+}
+
+/* Computer section: red neon theme */
+.computer-section h2 {
+  color: var(--neon-red);
+  text-shadow: 0 0 10px var(--neon-red-glow);
+}
+
+.computer-section .board-grid {
+  border-color: var(--neon-red);
+  box-shadow:
+    0 0 20px var(--neon-red-glow),
+    0 8px 30px rgba(0, 0, 0, 0.6);
+}
+
+/* ==========================================================================
+   Turn Status Text Indicators
+   ========================================================================== */
+.status-text {
+  min-height: 24px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.player-status-text {
+  color: var(--neon-cyan);
+  text-shadow: 0 0 8px var(--neon-cyan-glow);
+}
+
+.computer-status-text {
+  color: var(--neon-amber);
+  text-shadow: 0 0 8px var(--neon-amber-glow);
+}
+
+/* ==========================================================================
+   Modal Dialogs (Game Over & Errors)
+   ========================================================================== */
+dialog {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--neon-cyan);
+  border-radius: 8px;
+  box-shadow:
+    0 0 30px var(--neon-cyan-glow),
+    0 12px 40px rgba(0, 0, 0, 0.8);
+  color: var(--text-primary);
+  padding: 28px 36px;
+  text-align: center;
+}
+
+dialog::backdrop {
+  background: rgba(5, 8, 15, 0.75);
+}
+
+dialog p {
+  margin: 0 0 20px 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: 1px;
 }
