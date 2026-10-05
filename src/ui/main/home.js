@@ -1,11 +1,14 @@
 import { initiateGame } from "../../logic/gameInitiator.js";
 import { createBoardGrid } from "../components/grid.js";
 import { resetElement } from "../components/resetElement.js";
+import { createErrorDialog } from "../components/errorDialog.js";
 // ships assets
 import shipTwo from "../../../assets/ship-2.svg";
 import shipThree from "../../../assets/ship-3.svg";
 import shipFour from "../../../assets/ship-4.svg";
 import shipFive from "../../../assets/ship-5.svg";
+import Player from "../../Classes/Player.js";
+import randomizeShips from "../../logic/randomizeShips.js";
 
 // main function to render home page
 export function renderHome() {
@@ -13,6 +16,7 @@ export function renderHome() {
   // remove all elements in main to ensure no other pages overlap
   resetElement(main);
   // ensure section are correctly aligned with a flex column parent container
+  const player = new Player("p");
   const boardsContainer = document.createElement("div");
   boardsContainer.classList.add("boards-container");
 
@@ -83,7 +87,18 @@ export function renderHome() {
   playBtn.textContent = "Play";
   playBtnContainer.appendChild(playBtn);
 
-  playBtn.addEventListener("click", initiateGame);
+  randomizeBtn.addEventListener("click", () => randomizeShips(player));
+  resetBtn.addEventListener("click", () => player.Gameboard.resetBoard());
+
+  playBtn.addEventListener("click", () => {
+    if (player.Gameboard.Ships.length < 5) {
+      const error = createErrorDialog("Please place all ships before playing.");
+      main.appendChild(error);
+      error.showModal();
+    } else {
+      initiateGame(player);
+    }
+  });
 
   main.appendChild(boardsContainer);
   main.appendChild(playBtnContainer);
