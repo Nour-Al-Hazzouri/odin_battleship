@@ -72,6 +72,16 @@ describe("Board Functionalities", () => {
         new Error("invalid ship position"),
       );
     });
+    it("should clear the board when the clearBoard method is ran", () => {
+      gameboard.placeShip(2, [0, 0], "h");
+      gameboard.placeShip(3, [1, 0], "h");
+      gameboard.placeShip(3, [2, 0], "h");
+      gameboard.placeShip(4, [3, 0], "h");
+      gameboard.placeShip(5, [4, 0], "h");
+      expect(gameboard.Ships.length).toBe(5);
+      gameboard.resetBoard();
+      expect(gameboard.Ships.length).toBe(0);
+    });
   });
   describe("Receiving Attacks", () => {
     it("should correctly update the hit status for attacked slots and ships", () => {
