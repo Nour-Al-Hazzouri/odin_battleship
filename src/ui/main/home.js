@@ -15,8 +15,11 @@ export function renderHome() {
   const main = document.querySelector("main");
   // remove all elements in main to ensure no other pages overlap
   resetElement(main);
-  // ensure section are correctly aligned with a flex column parent container
+
+  const headerButton = document.querySelector("header button");
+  if (headerButton) document.querySelector("header").removeChild(headerButton);
   const player = new Player("p");
+  // ensure section are correctly aligned with a flex column parent container
   const boardsContainer = document.createElement("div");
   boardsContainer.classList.add("boards-container");
 

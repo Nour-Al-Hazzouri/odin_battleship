@@ -378,6 +378,7 @@ footer p {
    Modal Dialogs (Game Over & Errors)
    ========================================================================== */
 dialog {
+  position: relative;
   background-color: var(--bg-surface);
   border: 1px solid var(--neon-cyan);
   border-radius: 8px;
@@ -394,8 +395,30 @@ dialog::backdrop {
 }
 
 dialog p {
-  margin: 0 0 20px 0;
+  margin: 12px 0 20px 0;
   font-size: 1.25rem;
   font-weight: 600;
   letter-spacing: 1px;
+}
+
+.close-x-btn {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  color: var(--text-muted);
+  font-size: 1.2rem;
+  padding: 2px 6px;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.close-x-btn:hover {
+  background: transparent;
+  color: var(--neon-red);
+  text-shadow: 0 0 8px var(--neon-red-glow);
+  box-shadow: none;
+  transform: none;
 }

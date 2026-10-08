@@ -154,6 +154,48 @@ Added CSS classes to identify the status text spans for both player and computer
   - `src/styles.css`: Implemented dark neon design system, 40px × 40px board cell dimensions, 400px ship dock container, custom `:disabled` cell overrides, and neon glowing elements for header, footer, playground, status indicators, and modal dialogs.
     - _Why_: Establish modern minimalist dark neon aesthetic, align board cells with 40px SVG segment sizes for future drag-and-drop functionality, and ensure clicked/disabled board cells retain high contrast and visual feedback without browser-default dimming.
 
+---
+
+## Request #13 — 2026-10-07
+
+- **Technical Summary**: Extracted `overDialog` modal component to `src/ui/components/overDialog.js`.
+- **Modified Files**:
+  - `src/ui/components/overDialog.js` (created)
+  - `src/logic/gameController.js`
+- **Logic Changes**:
+  - Created `createOverDialog(message)` UI component that constructs the `<dialog>` modal element and attaches a close event listener to reset view with `renderHome()`.
+  - Refactored `showGameOverDialog` in `src/logic/gameController.js` to instantiate and append `createOverDialog`.
+
 ### Plain English Summary
 
-Updated the home setup screen to display all five fleet vessels and redesigned the entire application with a minimalist, modern dark mode featuring glowing neon cyan, red, and amber accents. Board cell dimensions were set to 40px to match the ship graphic segments for drag-and-drop positioning, and disabled buttons were customized to keep attacks and hits distinctly visible.
+Extracted the game-over modal creation logic into its own reusable UI component `overDialog.js` in `src/ui/components/`. When closed, the dialog wipes the board views and returns the user to the home screen.
+
+---
+
+## Request #14 — 2026-10-07
+
+- **Technical Summary**: Added optional `closeButton` boolean parameter to `createOverDialog` in `src/ui/components/overDialog.js`.
+- **Modified Files**:
+  - `src/ui/components/overDialog.js`
+- **Logic Changes**:
+  - Conditionally rendered a top/dismiss "✕" button (`close-x-btn`) when `closeButton` is `true`.
+  - The "✕" button closes and removes the dialog without proceeding to `renderHome()`.
+
+### Plain English Summary
+
+Updated `createOverDialog` to support a boolean flag for adding an "✕" close button. When `true`, clicking "✕" simply dismisses the modal without clearing the game state or returning to the home screen.
+
+---
+
+## Request #15 — 2026-10-07
+
+- **Technical Summary**: Connected home navigation button `#home` in `src/ui/main/playground.js` to prompt confirmation via `createOverDialog` with `closeButton = true`.
+- **Modified Files**:
+  - `src/ui/main/playground.js`
+- **Logic Changes**:
+  - Added click listener on `#home` button inside `renderPlayground`.
+  - Displays `createOverDialog` configured with `closeButton = true` ("✕" button dismisses dialog, while Close/OK button navigates home and resets game state).
+
+### Plain English Summary
+
+Updated home button navigation inside the playground view to show a confirmation dialog using `createOverDialog(..., true)`. Clicking "✕" cancels and stays in game, while clicking Close/OK confirms and resets back to the home view.
