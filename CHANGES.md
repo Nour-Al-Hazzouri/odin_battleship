@@ -199,3 +199,16 @@ Updated `createOverDialog` to support a boolean flag for adding an "✕" close b
 ### Plain English Summary
 
 Updated home button navigation inside the playground view to show a confirmation dialog using `createOverDialog(..., true)`. Clicking "✕" cancels and stays in game, while clicking Close/OK confirms and resets back to the home view.
+
+---
+
+## Request #16 — 2026-10-28
+
+- **Technical Summary**: Replaced module-level global DOM query variables in `attackGrid.js` with centralized `getQueries()` from `gameState.js`.
+- **Modified Files**:
+  - `src/logic/attackGrid.js`: Imported `getQueries`, removed file-level `computerGrid`, `playerStatus`, `computerStatus` variables and initialization logic, and accessed cached DOM elements via `queries.computerGrid`, `queries.playerStatus`, and `queries.computerStatus`.
+    - _Why_: Centralize DOM references inside shared state management (`gameState.js`) instead of re-querying or holding localized globals.
+
+### Plain English Summary
+
+Updated `attackGrid.js` to pull DOM element references from the shared queries state object instead of maintaining separate global variables and query lookups inside the file.

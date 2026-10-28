@@ -1,5 +1,6 @@
 // ensure 5 ships exactly are placed correctly
 export default function randomizeShips(player) {
+  player.Gameboard.resetBoard();
   let placedShips = 0;
   const sizes = [2, 3, 3, 4, 5];
   while (placedShips <= 4)
