@@ -212,3 +212,35 @@ Updated home button navigation inside the playground view to show a confirmation
 ### Plain English Summary
 
 Updated `attackGrid.js` to pull DOM element references from the shared queries state object instead of maintaining separate global variables and query lookups inside the file.
+
+---
+
+## Request #17 — 2026-10-29
+
+- **Technical Summary**: Extracted `validateCoordinates` logic into a reusable module under `src/logic/`.
+- **Modified Files**:
+  - `src/logic/validateCoordinates.js`: Created function `validateCoordinates(x, y)` checking bounds 0–9.
+  - `src/Classes/Gameboard.js`: Imported `validateCoordinates`, removed private `#validateCoordinates` method, and updated `placeShip` and `receiveAttack` to use the imported module.
+    - _Why_: Allow any module to validate board coordinates without coupling to the `Gameboard` instance.
+
+### Plain English Summary
+
+Extracted coordinate bounds validation logic into its own module `validateCoordinates.js` in `src/logic/` and updated `Gameboard.js` to use it instead of an internal private method.
+
+---
+
+## Request #18 — 2026-10-29
+
+- **Technical Summary**: Created `gameStateReset` and completed directional smart-targeting attack logic in `attackGrid.js`.
+- **Modified Files**:
+  - `src/logic/gameStateReset.js`: Created function to reset `anchorPositions` to original four offsets and restore `state` (`originalAnchor`, `currentAnchor`, `shipLocked`).
+  - `src/logic/attackGrid.js`:
+    - Fixed `receiveAttack` call signature to take coordinate array `[posX, posY]`.
+    - Added coordinate validity and unattacked slot checks (`!player.Board[posX][posY].HitStatus`).
+    - Handled successful hit: checks if ship sunk (triggering `gameStateReset()`) or increments/decrements current direction offset using `updateAnchorPosition()`.
+    - Handled misses or invalid coordinates: shifts `anchorPositions`, resets `currentAnchor` back to `originalAnchor`, and resets state if possibilities are exhausted.
+    - _Why_: Enable computer to follow hit streaks in a line until ships are sunk, pivoting across directions when misses or boundaries are hit.
+
+### Plain English Summary
+
+Created `gameStateReset.js` to reset targeting state and anchor offsets back to default values. Updated computer attack logic in `attackGrid.js` to intelligently target adjacent tiles along the current line when a ship is hit, reverse or switch directions when encountering misses or board edges, and return to random hunting once the target ship is sunk.

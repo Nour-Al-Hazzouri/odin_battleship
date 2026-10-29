@@ -1,5 +1,6 @@
 import Ship from "./Ship.js";
 import Node from "./Node.js";
+import validateCoordinates from "../logic/validateCoordinates.js";
 
 class Gameboard {
   #board = Array.from({ length: 10 }, () =>
@@ -21,11 +22,6 @@ class Gameboard {
     if (!this.#allShipsSunk) this.#allShipsSunk = true;
   }
 
-  // validate coordinates to be between [0][0] and [9][9]
-  #validateCoordinates(x, y) {
-    if (x < 0 || x > 9 || y < 0 || y > 9) return false;
-    return true;
-  }
   // (AI-Assisted refactor) validate direction to be within valid coordinates and not hitting any ships
   #validatePossibilities(x, y, direction, length) {
     // use a for loop to dynamically apply rules to different lengths instead of multiple nested 'if's
@@ -58,7 +54,7 @@ class Gameboard {
     // destructuring coordinates for easier usage
     const [x, y] = [coordinates[0], coordinates[1]];
     // validate coordinates
-    if (!this.#validateCoordinates(x, y))
+    if (!validateCoordinates(x, y))
       throw new Error("out-of-bound coordinates are not acceptable");
     // create new ship and validate its position
     const newShip = new Ship(length);
@@ -75,7 +71,7 @@ class Gameboard {
     // destructuring coordinates for easier usage
     const [x, y] = [coordinates[0], coordinates[1]];
     const attackedSlot = this.#board[x][y];
-    if (!this.#validateCoordinates(x, y))
+    if (!validateCoordinates(x, y))
       throw new Error("out-of-bound coordinates are not acceptable");
     if (!attackedSlot.HitStatus) attackedSlot.hit();
     else throw new Error("position already attacked");

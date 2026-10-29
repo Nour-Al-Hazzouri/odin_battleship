@@ -11,12 +11,24 @@ export const updateQueries = (newQueries) => {
 
 export const getQueries = () => globalQueries;
 
-// dynamic state used for the smart computer algorithm
-// keep track of hit ships to sink them
+/*
+dynamic state used for the smart computer algorithm
+keep track of hit ships to sink them
+*/
+export const anchorPositions = [
+  [0, -1],
+  [-1, 0],
+  [0, +1],
+  [+1, 0],
+];
+
+export const shiftAnchorPosition = () => anchorPositions.shift();
+export const updateAnchorPosition = (value) => (anchorPositions[0] = value);
+
 let state = {
   originalAnchor: null,
   currentAnchor: null,
-  visitedAnchors: [],
+  shipLocked: false,
 };
 
 export const updateState = (newState) => {
