@@ -154,6 +154,93 @@ Added CSS classes to identify the status text spans for both player and computer
   - `src/styles.css`: Implemented dark neon design system, 40px × 40px board cell dimensions, 400px ship dock container, custom `:disabled` cell overrides, and neon glowing elements for header, footer, playground, status indicators, and modal dialogs.
     - _Why_: Establish modern minimalist dark neon aesthetic, align board cells with 40px SVG segment sizes for future drag-and-drop functionality, and ensure clicked/disabled board cells retain high contrast and visual feedback without browser-default dimming.
 
+---
+
+## Request #13 — 2026-10-07
+
+- **Technical Summary**: Extracted `overDialog` modal component to `src/ui/components/overDialog.js`.
+- **Modified Files**:
+  - `src/ui/components/overDialog.js` (created)
+  - `src/logic/gameController.js`
+- **Logic Changes**:
+  - Created `createOverDialog(message)` UI component that constructs the `<dialog>` modal element and attaches a close event listener to reset view with `renderHome()`.
+  - Refactored `showGameOverDialog` in `src/logic/gameController.js` to instantiate and append `createOverDialog`.
+
 ### Plain English Summary
 
-Updated the home setup screen to display all five fleet vessels and redesigned the entire application with a minimalist, modern dark mode featuring glowing neon cyan, red, and amber accents. Board cell dimensions were set to 40px to match the ship graphic segments for drag-and-drop positioning, and disabled buttons were customized to keep attacks and hits distinctly visible.
+Extracted the game-over modal creation logic into its own reusable UI component `overDialog.js` in `src/ui/components/`. When closed, the dialog wipes the board views and returns the user to the home screen.
+
+---
+
+## Request #14 — 2026-10-07
+
+- **Technical Summary**: Added optional `closeButton` boolean parameter to `createOverDialog` in `src/ui/components/overDialog.js`.
+- **Modified Files**:
+  - `src/ui/components/overDialog.js`
+- **Logic Changes**:
+  - Conditionally rendered a top/dismiss "✕" button (`close-x-btn`) when `closeButton` is `true`.
+  - The "✕" button closes and removes the dialog without proceeding to `renderHome()`.
+
+### Plain English Summary
+
+Updated `createOverDialog` to support a boolean flag for adding an "✕" close button. When `true`, clicking "✕" simply dismisses the modal without clearing the game state or returning to the home screen.
+
+---
+
+## Request #15 — 2026-10-07
+
+- **Technical Summary**: Connected home navigation button `#home` in `src/ui/main/playground.js` to prompt confirmation via `createOverDialog` with `closeButton = true`.
+- **Modified Files**:
+  - `src/ui/main/playground.js`
+- **Logic Changes**:
+  - Added click listener on `#home` button inside `renderPlayground`.
+  - Displays `createOverDialog` configured with `closeButton = true` ("✕" button dismisses dialog, while Close/OK button navigates home and resets game state).
+
+### Plain English Summary
+
+Updated home button navigation inside the playground view to show a confirmation dialog using `createOverDialog(..., true)`. Clicking "✕" cancels and stays in game, while clicking Close/OK confirms and resets back to the home view.
+
+---
+
+## Request #16 — 2026-10-28
+
+- **Technical Summary**: Replaced module-level global DOM query variables in `attackGrid.js` with centralized `getQueries()` from `gameState.js`.
+- **Modified Files**:
+  - `src/logic/attackGrid.js`: Imported `getQueries`, removed file-level `computerGrid`, `playerStatus`, `computerStatus` variables and initialization logic, and accessed cached DOM elements via `queries.computerGrid`, `queries.playerStatus`, and `queries.computerStatus`.
+    - _Why_: Centralize DOM references inside shared state management (`gameState.js`) instead of re-querying or holding localized globals.
+
+### Plain English Summary
+
+Updated `attackGrid.js` to pull DOM element references from the shared queries state object instead of maintaining separate global variables and query lookups inside the file.
+
+---
+
+## Request #17 — 2026-10-29
+
+- **Technical Summary**: Extracted `validateCoordinates` logic into a reusable module under `src/logic/`.
+- **Modified Files**:
+  - `src/logic/validateCoordinates.js`: Created function `validateCoordinates(x, y)` checking bounds 0–9.
+  - `src/Classes/Gameboard.js`: Imported `validateCoordinates`, removed private `#validateCoordinates` method, and updated `placeShip` and `receiveAttack` to use the imported module.
+    - _Why_: Allow any module to validate board coordinates without coupling to the `Gameboard` instance.
+
+### Plain English Summary
+
+Extracted coordinate bounds validation logic into its own module `validateCoordinates.js` in `src/logic/` and updated `Gameboard.js` to use it instead of an internal private method.
+
+---
+
+## Request #18 — 2026-10-29
+
+- **Technical Summary**: Created `gameStateReset` and completed directional smart-targeting attack logic in `attackGrid.js`.
+- **Modified Files**:
+  - `src/logic/gameStateReset.js`: Created function to reset `anchorPositions` to original four offsets and restore `state` (`originalAnchor`, `currentAnchor`, `shipLocked`).
+  - `src/logic/attackGrid.js`:
+    - Fixed `receiveAttack` call signature to take coordinate array `[posX, posY]`.
+    - Added coordinate validity and unattacked slot checks (`!player.Board[posX][posY].HitStatus`).
+    - Handled successful hit: checks if ship sunk (triggering `gameStateReset()`) or increments/decrements current direction offset using `updateAnchorPosition()`.
+    - Handled misses or invalid coordinates: shifts `anchorPositions`, resets `currentAnchor` back to `originalAnchor`, and resets state if possibilities are exhausted.
+    - _Why_: Enable computer to follow hit streaks in a line until ships are sunk, pivoting across directions when misses or boundaries are hit.
+
+### Plain English Summary
+
+Created `gameStateReset.js` to reset targeting state and anchor offsets back to default values. Updated computer attack logic in `attackGrid.js` to intelligently target adjacent tiles along the current line when a ship is hit, reverse or switch directions when encountering misses or board edges, and return to random hunting once the target ship is sunk.

@@ -1,9 +1,24 @@
 import { resetElement } from "../components/resetElement.js";
+import { createOverDialog } from "../components/overDialog.js";
 
 export function renderPlayground(playerGameboard, computerGameboard) {
   const main = document.querySelector("main");
-
   resetElement(main);
+
+  // add button to halt game and return to home page
+  const header = document.querySelector("header");
+  const headerButton = document.createElement("button");
+  headerButton.id = "home";
+  headerButton.textContent = "Home";
+  header.appendChild(headerButton);
+  headerButton.addEventListener("click", () => {
+    const dialog = createOverDialog(
+      "Are you sure you want to leave? Your progress will be lost.",
+      true,
+    );
+    main.appendChild(dialog);
+    dialog.showModal();
+  });
 
   // main section to display player board
   const playerSection = document.createElement("section");
