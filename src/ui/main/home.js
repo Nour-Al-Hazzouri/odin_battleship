@@ -49,6 +49,11 @@ export function renderHome() {
     const svgDiv = document.createElement("div");
     svgDiv.innerHTML = shipSVG;
     svgDiv.id = `svg-${i}`;
+    svgDiv.draggable = true;
+    svgDiv.addEventListener("dragstart", (e) => {
+      e.dataTransfer.setData("text/plain", e.target.id);
+      e.dataTransfer.effectAllowed = "move";
+    });
     actualShipsGrid.append(svgDiv);
   });
 
@@ -60,6 +65,37 @@ export function renderHome() {
   boardSection.classList.add("board-section");
   // 10x10 buttons grid gameboard
   const boardGrid = createBoardGrid();
+  // position relative to make absolute SVGs stick inside it
+  boardGrid.style.position = "relative";
+  //
+  for (const cellBtn of boardGrid.children) {
+    // making each cell btn become a drop container
+    cellBtn.addEventListener("dragover", (e) => {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = "move";
+    });
+    // when dragged element is released
+    cellBtn.addEventListener("drop", (e) => {
+      const [row, col] = JSON.parse(cellBtn.dataset.coordinates);
+      const id = e.dataTransfer.getData("text/plain");
+      const draggedSVG = document.getElementById(id);
+      // Position SVG over the grid by calculating coordinates
+      draggedSVG.style.position = "absolute";
+      draggedSVG.style.left = `${col * 40}px`;
+      draggedSVG.style.top = `${row * 40}px`;
+      draggedSVG.addEventListener("dragend", (e) => {
+        // If cancelled or dropped outside any valid dropzone
+        if (e.dataTransfer.dropEffect === "none") {
+          // Reset inline positioning and return to original container
+          draggedSVG.style.position = "";
+          draggedSVG.style.left = "";
+          draggedSVG.style.top = "";
+          actualShipsGrid.appendChild(draggedSVG);
+        }
+      });
+      boardGrid.appendChild(draggedSVG);
+    });
+  }
 
   const controlsContainer = document.createElement("div");
   controlsContainer.classList.add("controls-container");
