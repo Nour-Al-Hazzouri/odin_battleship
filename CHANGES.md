@@ -244,3 +244,81 @@ Extracted coordinate bounds validation logic into its own module `validateCoordi
 ### Plain English Summary
 
 Created `gameStateReset.js` to reset targeting state and anchor offsets back to default values. Updated computer attack logic in `attackGrid.js` to intelligently target adjacent tiles along the current line when a ship is hit, reverse or switch directions when encountering misses or board edges, and return to random hunting once the target ship is sunk.
+
+---
+
+## Request #19 — 2026-10-31
+
+- **Technical Summary**: Extracted ship SVG reset logic into a shared module `resetShips.js` under `src/logic/`.
+- **Modified Files**:
+  - `src/logic/resetShips.js`: Created helper to reset inline style positioning (`position`, `left`, `top`) and re-append ships back to `.actual-ships-grid`, either for an individual element or all 5 ship SVGs.
+  - `src/Classes/Gameboard.js`: Replaced inline SVG loop in `resetBoard()` with `resetShips()`.
+    - _Why_: Avoid duplicating UI reset logic and DOM manipulation across gameboard logic and drag-and-drop handlers.
+  - `src/ui/main/home.js`: Replaced inline styling reset in dragend listener with `resetShips(draggedSVG)`.
+    - _Why_: Standardize ship element reset handling across the application.
+
+### Plain English Summary
+
+Created a shared helper function `resetShips` in `src/logic/resetShips.js` to reset ship positioning styles and return them to the ship selection panel, and updated `Gameboard.js` and `home.js` to use it instead of duplicated inline styles.
+
+---
+
+## Request #20 — 2026-10-31
+
+- **Technical Summary**: Moved ship SVG assets import and array access to `gameState.js` exposed via `getShipSVGs()`.
+- **Modified Files**:
+  - `src/logic/gameState.js`: Imported ship SVGs and exported `getShipSVGs()` getter function.
+    - _Why_: Expose ship SVG assets globally from game state.
+  - `src/ui/main/home.js`: Removed local ship SVG imports, imported `getShipSVGs` from `gameState.js`, and retrieved array via `getShipSVGs()`.
+    - _Why_: Decouple ship assets definition from `home.js`.
+
+### Plain English Summary
+
+Imported the ship SVG assets into `gameState.js` and exported a `getShipSVGs()` getter function, then updated `home.js` to retrieve the ship SVGs via this getter rather than importing them directly.
+
+---
+
+## Request #21 — 2026-10-31
+
+- **Technical Summary**: Updated `boardPlaceShips` in `src/logic/randomizeShips.js` to correct syntax errors on `shipDetails`, pass coordinates and orientation from `shipDetails`, return `shipDetails`, and capture call in `randomizeShips`.
+- **Modified Files**:
+  - `src/logic/randomizeShips.js`:
+    - Fixed object literal assignment syntax for `shipDetails`.
+    - Added `ori` property to `shipDetails` and used it for orientation index.
+    - Updated `boardPlayer.Gameboard.placeShip` arguments to read from `shipDetails.col`, `shipDetails.row`, and `shipDetails.ori`.
+    - Returned `shipDetails` on successful ship placement.
+    - Assigned result of `boardPlaceShips` call to a variable before evaluating in conditional block inside `randomizeShips`.
+    - _Why_: Fulfill requested changes to `shipDetails` structure, placement parameters, and return value handling.
+
+### Plain English Summary
+
+Corrected `shipDetails` object declaration in `randomizeShips.js`, moved random orientation selection into the object, passed properties from `shipDetails` into `placeShip`, returned `shipDetails` on placement success, and assigned the call to an object/variable before the `if` check.
+
+---
+
+## Request #22 — 2026-10-31
+
+- **Technical Summary**: Positioned and rendered ship SVG elements on `.board-grid` during ship randomization in `randomizeShips.js`.
+- **Modified Files**:
+  - `src/logic/randomizeShips.js`:
+    - Queried `boardGrid` (`.board-grid`).
+    - Applied absolute positioning (`left` and `top` in 40px units) to each ship element based on `placed.col` and `placed.row`.
+    - Appended the positioned ship element as a child of `boardGrid`.
+    - _Why_: Visually place randomized ships on the board grid matching the coordinates returned by ship placement.
+
+### Plain English Summary
+
+Updated `randomizeShips.js` to query the board grid, calculate absolute CSS offsets for each ship from the placement coordinates, and append the ship element directly to the board grid.
+
+---
+
+## Request #23 — 2026-11-01
+
+- **Technical Summary**: Updated positioning calculation for vertical ship orientations in `randomizeShips.js`.
+- **Modified Files**:
+  - `src/logic/randomizeShips.js`: Mapped `placed.col` to row offset (`top`) and `placed.row` to column offset (`left`), adding `+ 1` cell offset to `left` when `placed.ori === 0` to compensate for the 90-degree transform-origin rotation.
+    - _Why_: Align vertically oriented SVG ships with their actual grid cells.
+
+### Plain English Summary
+
+Adjusted the CSS coordinate calculation in `randomizeShips.js` so vertical ships compensate for their rotation origin and align correctly with their board grid cells.

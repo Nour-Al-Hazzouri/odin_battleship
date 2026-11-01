@@ -1,3 +1,17 @@
+// ships assets
+import shipTwo from "../../assets/ship-2.svg";
+import shipThree from "../../assets/ship-3.svg";
+import shipFour from "../../assets/ship-4.svg";
+import shipFive from "../../assets/ship-5.svg";
+
+export const getShipSVGs = () => [
+  shipTwo,
+  shipThree,
+  shipThree,
+  shipFour,
+  shipFive,
+];
+
 // constant global queries used across game state
 let globalQueries = {
   computerGrid: null,

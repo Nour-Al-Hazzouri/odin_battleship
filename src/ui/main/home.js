@@ -2,13 +2,10 @@ import { initiateGame } from "../../logic/gameInitiator.js";
 import { createBoardGrid } from "../components/grid.js";
 import { resetElement } from "../components/resetElement.js";
 import { createErrorDialog } from "../components/errorDialog.js";
-// ships assets
-import shipTwo from "../../../assets/ship-2.svg";
-import shipThree from "../../../assets/ship-3.svg";
-import shipFour from "../../../assets/ship-4.svg";
-import shipFive from "../../../assets/ship-5.svg";
+import { getShipSVGs } from "../../logic/gameState.js";
 import Player from "../../Classes/Player.js";
 import randomizeShips from "../../logic/randomizeShips.js";
+import resetShips from "../../logic/resetShips.js";
 
 // main function to render home page
 export function renderHome() {
@@ -44,7 +41,7 @@ export function renderHome() {
   shipsGrid.appendChild(axisBtnContainer);
 
   // create same element with a loop for each ship size
-  const shipSVGs = [shipTwo, shipThree, shipThree, shipFour, shipFive];
+  const shipSVGs = getShipSVGs();
   shipSVGs.forEach((shipSVG, i) => {
     const svgDiv = document.createElement("div");
     svgDiv.innerHTML = shipSVG;
@@ -87,10 +84,7 @@ export function renderHome() {
         // If cancelled or dropped outside any valid dropzone
         if (e.dataTransfer.dropEffect === "none") {
           // Reset inline positioning and return to original container
-          draggedSVG.style.position = "";
-          draggedSVG.style.left = "";
-          draggedSVG.style.top = "";
-          actualShipsGrid.appendChild(draggedSVG);
+          resetShips(draggedSVG);
         }
       });
       boardGrid.appendChild(draggedSVG);

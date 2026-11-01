@@ -1,6 +1,7 @@
 import Ship from "./Ship.js";
 import Node from "./Node.js";
 import validateCoordinates from "../logic/validateCoordinates.js";
+import resetShips from "../logic/resetShips.js";
 
 class Gameboard {
   #board = Array.from({ length: 10 }, () =>
@@ -94,6 +95,8 @@ class Gameboard {
       }
     }
     this.#ships.length = 0;
+    // update UI to remove any placed ship
+    resetShips();
   }
 }
 
