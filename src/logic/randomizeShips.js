@@ -7,17 +7,19 @@ export default function randomizeShips(player) {
   while (placedShips <= 4) {
     const placed = boardPlaceShips(player, sizes[placedShips]);
     if (placed) {
-      const currentShip = document.querySelector(`#svg-${placedShips}`);
-      currentShip.style.position = "absolute";
-      if (placed.ori === 0) {
-        currentShip.style.left = `${(placed.row + 1) * 40}px`;
-        currentShip.style.top = `${placed.col * 40}px`;
-        currentShip.querySelector("svg").classList.add("vertical");
-      } else {
-        currentShip.style.left = `${placed.row * 40}px`;
-        currentShip.style.top = `${placed.col * 40}px`;
+      if (player.Type === "p") {
+        const currentShip = document.querySelector(`#svg-${placedShips}`);
+        currentShip.style.position = "absolute";
+        if (placed.ori === 0) {
+          currentShip.style.left = `${(placed.row + 1) * 40}px`;
+          currentShip.style.top = `${placed.col * 40}px`;
+          currentShip.querySelector("svg").classList.add("vertical");
+        } else {
+          currentShip.style.left = `${placed.row * 40}px`;
+          currentShip.style.top = `${placed.col * 40}px`;
+        }
+        boardGrid.appendChild(currentShip);
       }
-      boardGrid.appendChild(currentShip);
       placedShips += 1;
     }
   }

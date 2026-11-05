@@ -32,11 +32,12 @@ export function renderHome() {
 
   const axisBtn = document.createElement("button");
   axisBtn.classList.add("axis-btn");
-  axisBtn.textContent = "vertical";
+  axisBtn.textContent = "VERTICAL";
   axisBtnContainer.appendChild(axisBtn);
   // actual grid to have the ship correctly aligned
   const actualShipsGrid = document.createElement("div");
   actualShipsGrid.classList.add("actual-ships-grid");
+  actualShipsGrid.id = "svg-container";
 
   shipsGrid.appendChild(axisBtnContainer);
 
@@ -52,6 +53,11 @@ export function renderHome() {
       e.dataTransfer.effectAllowed = "move";
     });
     actualShipsGrid.append(svgDiv);
+  });
+
+  axisBtn.addEventListener("click", () => {
+    if (axisBtn.textContent === "VERTICAL") axisBtn.textContent = "HORIZONTAL";
+    else axisBtn.textContent = "VERTICAL";
   });
 
   shipsGrid.append(actualShipsGrid);
@@ -78,8 +84,13 @@ export function renderHome() {
       const draggedSVG = document.getElementById(id);
       // Position SVG over the grid by calculating coordinates
       draggedSVG.style.position = "absolute";
-      draggedSVG.style.left = `${col * 40}px`;
-      draggedSVG.style.top = `${row * 40}px`;
+      if (draggedSVG.querySelector("svg")?.classList.contains("vertical")) {
+        draggedSVG.style.left = `${(col + 1) * 40}px`;
+        draggedSVG.style.top = `${row * 40}px`;
+      } else {
+        draggedSVG.style.left = `${col * 40}px`;
+        draggedSVG.style.top = `${row * 40}px`;
+      }
       draggedSVG.addEventListener("dragend", (e) => {
         // If cancelled or dropped outside any valid dropzone
         if (e.dataTransfer.dropEffect === "none") {

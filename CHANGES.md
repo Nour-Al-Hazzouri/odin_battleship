@@ -322,3 +322,18 @@ Updated `randomizeShips.js` to query the board grid, calculate absolute CSS offs
 ### Plain English Summary
 
 Adjusted the CSS coordinate calculation in `randomizeShips.js` so vertical ships compensate for their rotation origin and align correctly with their board grid cells.
+
+---
+
+## Request #24 — 2026-11-01
+
+- **Technical Summary**: Implemented axis toggle button functionality and drop coordinate adjustments for vertical ships in `home.js`.
+- **Modified Files**:
+  - `src/ui/main/home.js`:
+    - Updated `axisBtn` click listener to toggle the `vertical` class on inner `<svg>` elements of ships located inside `.actual-ships-grid`.
+    - Updated board grid `drop` event listener to check for `.vertical` class on dragged ship's SVG and adjust `left` offset with `+ 1` cell (40px) compensation.
+    - _Why_: Allow toggling ship orientation for unplaced ships and ensure dropped vertical ships align with board grid coordinates.
+
+### Plain English Summary
+
+Added axis toggle logic so clicking the axis button rotates only unplaced ships in the ship selector panel by adding or removing the vertical class, and updated drop placement positioning to align vertical ships on the board grid.
