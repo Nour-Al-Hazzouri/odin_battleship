@@ -1,6 +1,8 @@
 import Ship from "./Ship.js";
 import Node from "./Node.js";
 import validateCoordinates from "../logic/validateCoordinates.js";
+import resetShipSelection from "../ui/components/resetShipSelection.js";
+import toggleShipButtons from "../ui/components/toggleShipButtons.js";
 
 class Gameboard {
   #board = Array.from({ length: 10 }, () =>
@@ -94,6 +96,8 @@ class Gameboard {
       }
     }
     this.#ships.length = 0;
+    resetShipSelection();
+    toggleShipButtons(false);
   }
 }
 
