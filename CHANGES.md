@@ -361,3 +361,16 @@ Created a new `detectShips` module in `src/logic/` that checks each coordinate o
 ### Plain English Summary
 
 Extracted ship button disabling logic into a reusable `toggleShipButtons` UI component and relocated `placeShip` and `resetShipSelection` to `src/ui/components/`. Wired the buttons to disable during board randomization and re-enable when the board resets, with dedicated disabled styling in CSS.
+
+---
+
+## Request #26 — 2026-11-07
+
+- **Technical Summary**: Added GitHub Actions workflow configuration for building and deploying to `gh-pages` on pull requests targeting `main`.
+- **Modified Files**:
+  - `.github/workflows/deploy.yml`: Configured workflow triggered by pull requests targeting `main` branch to install dependencies, execute `npm run build`, and deploy the `dist/` directory to `gh-pages` branch with clean/force push using `JamesIves/github-pages-deploy-action@v4`.
+    - _Why_: Automate production builds and deployment to the GitHub Pages hosting branch on pull request creation/updates targeting `main`.
+
+### Plain English Summary
+
+Created a GitHub Actions workflow file that automatically runs the project build and pushes the compiled distribution files directly to the `gh-pages` branch whenever a pull request targeting `main` is opened or updated.

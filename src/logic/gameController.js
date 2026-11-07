@@ -2,8 +2,9 @@ import { createOverDialog } from "../ui/components/overDialog.js";
 import randomizeShips from "./randomizeShips.js";
 import attackGrid from "./attackGrid.js";
 import { updateQueries } from "./gameState.js";
+import detectShips from "./detectShips.js";
 
-export function startBattleship(player, computer) {
+export function startBattleship(player, playerGrid, computer) {
   // update queries into global object to avoid constant re-calling
   updateQueries({
     computerGrid: document.querySelector(".computer-grid"),
@@ -12,6 +13,7 @@ export function startBattleship(player, computer) {
   });
   // place computer ships randomly
   randomizeShips(computer);
+  detectShips(player, playerGrid);
   // allow for each computer cell to be used to attack
   const gridButtons = document.querySelectorAll(".computer-cell-button");
   gridButtons.forEach((button) => {

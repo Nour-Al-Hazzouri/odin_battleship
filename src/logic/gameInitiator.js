@@ -5,5 +5,5 @@ import { startBattleship } from "./gameController.js";
 export function initiateGame(player) {
   const computer = new Player("c");
   renderPlayground(player.Grid, computer.Grid);
-  startBattleship(player, computer);
+  startBattleship(player, player.Grid, computer);
 }

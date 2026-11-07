@@ -53,6 +53,7 @@ class Gameboard {
   }
   // place the ship based on coordinates and direction while accounting for edges and other ships
   placeShip(length, coordinates, direction) {
+    if (this.#ships.length === 5) throw new Error("limit is 5 ships");
     // destructuring coordinates for easier usage
     const [x, y] = [coordinates[0], coordinates[1]];
     // validate coordinates
