@@ -127,9 +127,11 @@ main {
   margin-bottom: 12px;
 }
 
-/* Fleet dock containing all 5 ship SVGs */
+/* Fleet dock containing all 5 ship labels and buttons */
 .actual-ships-grid {
   display: flex;
+  border: 1px var(--neon-cyan-subtle) solid;
+  border-radius: 10px;
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
@@ -138,19 +140,38 @@ main {
   gap: 8px;
 }
 
-/* SVG wrapper styling with neon ship drop-shadows */
+/* Ship row containing label and button */
 .actual-ships-grid > div {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition:
-    transform 0.2s ease,
-    filter 0.2s ease;
-  filter: drop-shadow(0 0 4px rgba(0, 240, 255, 0.25));
+  width: 100%;
+  padding: 0 10px;
 }
 
-.actual-ships-grid > div:hover {
-  filter: drop-shadow(0 0 10px rgba(0, 240, 255, 0.5));
+.actual-ships-grid label {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+}
+
+.actual-ships-grid button {
+  min-width: 140px;
+  text-align: center;
+}
+
+.actual-ships-grid button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  border-color: var(--border-subtle);
+  box-shadow: none;
+  transform: none;
+}
+
+.selected {
+  border: 5px solid green;
 }
 
 /* ==========================================================================
@@ -250,7 +271,6 @@ button {
   font-size: 0.85rem;
   font-weight: 600;
   letter-spacing: 1.5px;
-  text-transform: uppercase;
   cursor: pointer;
   transition: all 0.2s ease;
   box-shadow: 0 0 8px rgba(0, 240, 255, 0.15);

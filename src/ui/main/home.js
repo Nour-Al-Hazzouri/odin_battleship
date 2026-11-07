@@ -2,13 +2,12 @@ import { initiateGame } from "../../logic/gameInitiator.js";
 import { createBoardGrid } from "../components/grid.js";
 import { resetElement } from "../components/resetElement.js";
 import { createErrorDialog } from "../components/errorDialog.js";
-// ships assets
-import shipTwo from "../../../assets/ship-2.svg";
-import shipThree from "../../../assets/ship-3.svg";
-import shipFour from "../../../assets/ship-4.svg";
-import shipFive from "../../../assets/ship-5.svg";
 import Player from "../../Classes/Player.js";
 import randomizeShips from "../../logic/randomizeShips.js";
+import placeShip from "../components/placeShip.js";
+import { updateShipDetails, getShips } from "../../logic/gameState.js";
+import detectShips from "../../logic/detectShips.js";
+import toggleShipButtons from "../components/toggleShipButtons.js";
 
 // main function to render home page
 export function renderHome() {
@@ -35,7 +34,16 @@ export function renderHome() {
 
   const axisBtn = document.createElement("button");
   axisBtn.classList.add("axis-btn");
-  axisBtn.textContent = "vertical";
+  axisBtn.textContent = "HORIZONTAL";
+  axisBtn.addEventListener("click", () => {
+    if (axisBtn.textContent === "HORIZONTAL") {
+      axisBtn.textContent = "VERTICAL";
+      updateShipDetails({ orientation: "v" });
+    } else {
+      axisBtn.textContent = "HORIZONTAL";
+      updateShipDetails({ orientation: "h" });
+    }
+  });
   axisBtnContainer.appendChild(axisBtn);
   // actual grid to have the ship correctly aligned
   const actualShipsGrid = document.createElement("div");
@@ -43,13 +51,21 @@ export function renderHome() {
 
   shipsGrid.appendChild(axisBtnContainer);
 
-  // create same element with a loop for each ship size
-  const shipSVGs = [shipTwo, shipThree, shipThree, shipFour, shipFive];
-  shipSVGs.forEach((shipSVG, i) => {
-    const svgDiv = document.createElement("div");
-    svgDiv.innerHTML = shipSVG;
-    svgDiv.id = `svg-${i}`;
-    actualShipsGrid.append(svgDiv);
+  getShips().forEach((ship) => {
+    const button = document.createElement("button");
+    button.id = ship.id;
+    button.textContent = `${ship.name} (${ship.size})`;
+
+    button.addEventListener("click", () => {
+      const selected = document.querySelector(".selected");
+      if (selected) {
+        selected.classList.remove("selected");
+      }
+      button.classList.add("selected");
+      updateShipDetails({ selectedShip: ship });
+    });
+
+    actualShipsGrid.append(button);
   });
 
   shipsGrid.append(actualShipsGrid);
@@ -60,6 +76,7 @@ export function renderHome() {
   boardSection.classList.add("board-section");
   // 10x10 buttons grid gameboard
   const boardGrid = createBoardGrid();
+  placeShip(player, boardGrid);
 
   const controlsContainer = document.createElement("div");
   controlsContainer.classList.add("controls-container");
@@ -90,7 +107,11 @@ export function renderHome() {
   playBtn.textContent = "Play";
   playBtnContainer.appendChild(playBtn);
 
-  randomizeBtn.addEventListener("click", () => randomizeShips(player));
+  randomizeBtn.addEventListener("click", () => {
+    randomizeShips(player);
+    detectShips(player, boardGrid);
+    toggleShipButtons(true);
+  });
   resetBtn.addEventListener("click", () => player.Gameboard.resetBoard());
 
   playBtn.addEventListener("click", () => {

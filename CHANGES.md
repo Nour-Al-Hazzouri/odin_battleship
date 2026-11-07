@@ -244,3 +244,133 @@ Extracted coordinate bounds validation logic into its own module `validateCoordi
 ### Plain English Summary
 
 Created `gameStateReset.js` to reset targeting state and anchor offsets back to default values. Updated computer attack logic in `attackGrid.js` to intelligently target adjacent tiles along the current line when a ship is hit, reverse or switch directions when encountering misses or board edges, and return to random hunting once the target ship is sunk.
+
+---
+
+## Request #19 — 2026-11-05
+
+- **Technical Summary**: Removed SVG assets, replaced them with 5 interactive ship labels and buttons, wired axis toggle and ship selection event handlers, and implemented `resetShipSelection`.
+- **Modified Files**:
+  - `assets/ship-2.svg`, `assets/ship-3.svg`, `assets/ship-4.svg`, `assets/ship-5.svg`: Deleted SVG files from assets directory.
+    - _Why_: Deprecate SVG fleet graphics in favor of button/label DOM controls.
+  - `src/ui/main/home.js`: Removed SVG imports and rendering loop; added rendering of 5 ship labels and buttons, an event listener on `axisBtn` toggling text and updating orientation (`v`/`h`) in `gameState.js`, and click listeners on ship buttons to apply `.selected` styling and update `selectedShip` in `gameState.js`.
+    - _Why_: Provide interactive controls to toggle placement axis and select ships before placing them on the board.
+  - `src/styles.css`: Replaced SVG wrapper styling with `.actual-ships-grid` label/button flex layout and added `.selected` border rule.
+    - _Why_: Fit the new controls naturally within the setup panel and highlight the active ship selection with a 5px green border.
+  - `src/logic/resetShipSelection.js`: Created function to query and remove `.selected` class from the active ship and reset `selectedShip` in `gameState.js`.
+    - _Why_: Provide centralized logic to clear ship selection styling.
+  - `src/Classes/Gameboard.js`: Imported and called `resetShipSelection()` inside `resetBoard()`.
+    - _Why_: Clear ship selection and highlighting whenever the board is reset.
+
+### Plain English Summary
+
+Removed all ship SVG files from the project and replaced them with 5 labels and buttons representing the fleet in the home setup view. Added an event listener to toggle the axis button between HORIZONTAL and VERTICAL while synchronizing orientation state, wired ship selection listeners to highlight the chosen ship with a 5px green border and update selected ship state, and created a reset helper invoked during board resets to clear active ship styling.
+
+---
+
+## Request #20 — 2026-11-05
+
+- **Technical Summary**: Moved global ship configurations to `gameState.js` with `getShips()` getter, removed wrapper divs around ship buttons, and added board grid cell click placement with error dialog handling and light blue cell highlighting.
+- **Modified Files**:
+  - `src/logic/gameState.js`: Added global `ships` array and exported `getShips()` getter function.
+    - _Why_: Expose standard ship objects and sizes globally across logic and UI modules.
+  - `src/ui/main/home.js`: Removed local `ships` array and wrapper divs around ship buttons in `.actual-ships-grid`; added click event listeners on `boardGrid.children` that retrieve `selectedShip` and `orientation` from `gameState.js`, invoke `player.Gameboard.placeShip`, color placed ship cells with `lightblue`, and display an `errorDialog` when an illegal move is caught.
+    - _Why_: Enable interactive board ship placement with error feedback and visual feedback on placed ships.
+
+### Plain English Summary
+
+Extracted ship definitions into `gameState.js` accessible via a getter function and streamlined the ship button rendering by removing unnecessary container divs. Added click handlers across the home board grid so players can place selected ships on valid tiles, highlighting the placed ship tiles in light blue and showing an error modal on illegal placements.
+
+---
+
+## Request #21 — 2026-11-05
+
+- **Technical Summary**: Updated placed ship cell background color to darker `steelblue` and reset cell colors to default inside `resetShipSelection.js`.
+- **Modified Files**:
+  - `src/ui/main/home.js`: Changed cell background color from `lightblue` to `steelblue`.
+    - _Why_: Prevent ship cells from appearing too bright against the dark surface theme.
+  - `src/logic/resetShipSelection.js`: Queried all `.board-grid .cell-btn` elements and cleared inline `backgroundColor`.
+    - _Why_: Restore cell button colors back to default theme surface on board reset.
+
+### Plain English Summary
+
+Adjusted placed ship tiles to use a darker steel blue color instead of bright light blue, and updated the ship selection reset routine to clear inline background styling on all board cells when the board is reset.
+
+---
+
+## Request #22 — 2026-11-06
+
+- **Technical Summary**: Extracted ship placement and styling listener logic from `home.js` into reusable `placeShip` module under `src/logic/`.
+- **Modified Files**:
+  - `src/logic/placeShip.js`: Created function `placeShip(player, board)` that listens to board cell clicks, places the selected ship on the player's gameboard, styles placed ship cells in `steelblue`, and shows an error dialog on illegal placements.
+    - _Why_: Modularize ship placement and grid styling logic so it can be called from any module.
+  - `src/ui/main/home.js`: Replaced inline cell click listener loop with `placeShip(player, boardGrid)`.
+    - _Why_: Delegate ship placement logic to the extracted module.
+
+### Plain English Summary
+
+Extracted the board cell click handlers and ship placement logic into a reusable `placeShip` module in `src/logic/`, accepting the player and board grid, placing ships with error handling, and styling the placed cells. Updated `home.js` to call this module.
+
+---
+
+## Request #23 — 2026-11-06
+
+- **Technical Summary**: Added virtual `.click()` trigger on the matching board grid cell button in `randomizeShips.js`.
+- **Modified Files**:
+  - `src/logic/randomizeShips.js`: Queried `.board-grid` and found the button matching `data-coordinates="[${col}, ${row}]"`, then invoked `.click()`.
+    - _Why_: Trigger cell click behavior when placing ships during player board randomization.
+
+### Plain English Summary
+
+Updated `randomizeShips.js` to locate the player's board grid cell matching the randomized ship coordinates and trigger a click event on that element.
+
+---
+
+## Request #24 — 2026-11-06
+
+- **Technical Summary**: Created `detectShips.js` in `src/logic/` with nested loops checking player board coordinates and coloring DOM grid cells.
+- **Modified Files**:
+  - `src/logic/detectShips.js`: Exported `detectShips(player, board)` function that loops through coordinates `(r, c)` of `player.Board` and sets `board.children[r * 10 + c].style.backgroundColor = "steelblue"` if a ship is present.
+    - _Why_: Inspect the 2D gameboard array and update matching DOM grid cells to reflect ship positions.
+
+### Plain English Summary
+
+Created a new `detectShips` module in `src/logic/` that checks each coordinate of the player's board using nested loops and styles corresponding cells on the DOM grid in steel blue when a ship is detected.
+
+---
+
+## Request #25 — 2026-11-07
+
+- **Technical Summary**: Extracted ship button toggling to a dedicated UI component, relocated `placeShip` and `resetShipSelection` from `src/logic/` to `src/ui/components/`, wired button disabling during randomization and re-enabling upon reset, and styled disabled ship buttons.
+- **Modified Files**:
+  - `src/ui/components/toggleShipButtons.js`: Created function `toggleShipButtons(disabled)` to enable or disable ship selection buttons.
+    - _Why_: Provide a reusable UI module for toggling the enabled state of fleet selection buttons.
+  - `src/logic/detectShips.js`: Removed button query and disabling logic from the board scan loop.
+    - _Why_: Separate ship button UI manipulation from gameboard cell detection.
+  - `src/ui/components/placeShip.js`: Moved from `src/logic/placeShip.js` and updated imports.
+    - _Why_: Classify DOM event handling for ship placement under UI components.
+  - `src/ui/components/resetShipSelection.js`: Moved from `src/logic/resetShipSelection.js` and updated imports.
+    - _Why_: Classify DOM selection reset behavior under UI components.
+  - `src/Classes/Gameboard.js`: Updated `resetShipSelection` import path, imported `toggleShipButtons`, and invoked `toggleShipButtons(false)` in `resetBoard()`.
+    - _Why_: Re-enable ship selection buttons when clearing the board.
+  - `src/ui/main/home.js`: Updated import paths for `placeShip`, imported `toggleShipButtons`, and called `toggleShipButtons(true)` inside the randomize button handler.
+    - _Why_: Disable ship selection buttons when the player randomizes fleet placement.
+  - `src/styles.css`: Added `:disabled` styling for `.actual-ships-grid button`.
+    - _Why_: Provide visual feedback (reduced opacity, not-allowed cursor) when ship buttons are disabled.
+
+### Plain English Summary
+
+Extracted ship button disabling logic into a reusable `toggleShipButtons` UI component and relocated `placeShip` and `resetShipSelection` to `src/ui/components/`. Wired the buttons to disable during board randomization and re-enable when the board resets, with dedicated disabled styling in CSS.
+
+---
+
+## Request #26 — 2026-11-07
+
+- **Technical Summary**: Added GitHub Actions workflow configuration for building and deploying to `gh-pages` on pull requests targeting `main`.
+- **Modified Files**:
+  - `.github/workflows/deploy.yml`: Configured workflow triggered by pull requests targeting `main` branch to install dependencies, execute `npm run build`, and deploy the `dist/` directory to `gh-pages` branch with clean/force push using `JamesIves/github-pages-deploy-action@v4`.
+    - _Why_: Automate production builds and deployment to the GitHub Pages hosting branch on pull request creation/updates targeting `main`.
+
+### Plain English Summary
+
+Created a GitHub Actions workflow file that automatically runs the project build and pushes the compiled distribution files directly to the `gh-pages` branch whenever a pull request targeting `main` is opened or updated.

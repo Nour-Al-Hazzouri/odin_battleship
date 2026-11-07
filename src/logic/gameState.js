@@ -36,3 +36,24 @@ export const updateState = (newState) => {
 };
 
 export const getState = () => state;
+
+// preserve selected ship state to place it on board
+let shipDetails = {
+  selectedShip: null,
+  orientation: "h",
+};
+
+export const getShipDetails = () => shipDetails;
+export const updateShipDetails = (newDetails) => {
+  shipDetails = { ...shipDetails, ...newDetails };
+};
+
+const ships = [
+  { name: "Carrier", size: 5, id: "carrier" },
+  { name: "Battleship", size: 4, id: "battleship" },
+  { name: "Cruiser", size: 3, id: "cruiser" },
+  { name: "Submarine", size: 3, id: "submarine" },
+  { name: "Destroyer", size: 2, id: "destroyer" },
+];
+
+export const getShips = () => ships;
