@@ -1,4 +1,4 @@
-import { getShipDetails } from "../../logic/gameState.js";
+import { getShipDetails, updateShipDetails } from "../../logic/gameState.js";
 import { createErrorDialog } from "./errorDialog.js";
 
 export default function placeShip(player, board) {
@@ -17,6 +17,9 @@ export default function placeShip(player, board) {
             shipCell.style.backgroundColor = "steelblue";
           }
         }
+        const queriedShip = document.querySelector(`#${selectedShip.id}`);
+        queriedShip.disabled = true;
+        updateShipDetails({ selectedShip: null });
       } catch (error) {
         const errorDialog = createErrorDialog("The move was illegal");
         const main = document.querySelector("main");
