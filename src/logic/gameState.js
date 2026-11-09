@@ -57,3 +57,13 @@ const ships = [
 ];
 
 export const getShips = () => ships;
+
+let placedShips = 0;
+
+export const getPlacedShips = () => placedShips;
+export const incrementPlacedShips = () => {
+  placedShips += 1;
+};
+export const resetPlacedShips = () => {
+  placedShips = 0;
+};

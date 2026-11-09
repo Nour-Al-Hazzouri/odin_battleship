@@ -1,3 +1,4 @@
+// warning dialog for information, no force quit
 export function createErrorDialog(message) {
   const errorDialog = document.createElement("dialog");
   errorDialog.classList.add("error-dialog");
@@ -5,7 +6,7 @@ export function createErrorDialog(message) {
   const errorMessage = document.createElement("p");
   errorMessage.textContent = message;
   errorDialog.appendChild(errorMessage);
-
+  // append dialog into main then remmove when closed
   const okButton = document.createElement("button");
   okButton.textContent = "OK";
   okButton.addEventListener("click", () => {

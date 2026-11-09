@@ -1,3 +1,4 @@
+// create board visually as a 10x10 buttons grid
 export function createBoardGrid(player) {
   const boardGrid = document.createElement("div");
   if (player === "p") boardGrid.classList.add("player-grid");

@@ -83,6 +83,16 @@ describe("Board Functionalities", () => {
       expect(gameboard.Ships.length).toBe(0);
     });
   });
+  it("should not allow more than 5 ships", () => {
+    gameboard.placeShip(2, [0, 0], "h");
+    gameboard.placeShip(3, [1, 0], "h");
+    gameboard.placeShip(3, [2, 0], "h");
+    gameboard.placeShip(4, [3, 0], "h");
+    gameboard.placeShip(5, [4, 0], "h");
+    expect(() => gameboard.placeShip(5, [5, 0], "h")).toThrow(
+      new Error("limit is 5 ships"),
+    );
+  });
   describe("Receiving Attacks", () => {
     it("should correctly update the hit status for attacked slots and ships", () => {
       const board = gameboard.Board;

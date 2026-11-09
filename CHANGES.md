@@ -374,3 +374,35 @@ Extracted ship button disabling logic into a reusable `toggleShipButtons` UI com
 ### Plain English Summary
 
 Created a GitHub Actions workflow file that automatically runs the project build and pushes the compiled distribution files directly to the `gh-pages` branch whenever a pull request targeting `main` is opened or updated.
+
+---
+
+## Request #27 — 2026-11-09
+
+- **Technical Summary**: Moved `placedShips` state to `gameState.js` with an increment helper, kept `sizes` in `randomizeShips.js`, and replaced `try/catch` with a direct conditional check on `placeShip`.
+- **Modified Files**:
+  - `src/logic/gameState.js`: Added `placedShips` variable and accessor/mutator functions (`getPlacedShips`, `incrementPlacedShips`, `resetPlacedShips`).
+    - _Why_: Centralize ship placement counter state and provide controlled incremental mutation via a dedicated function.
+  - `src/logic/randomizeShips.js`: Replaced local `placedShips` declaration with imports from `gameState.js`, kept `sizes = [2, 3, 3, 4, 5]`, removed `try/catch` in `boardPlaceShips` in favor of evaluating `placeShip(...)` directly, incrementing `placedShips` on success, and returning boolean status.
+    - _Why_: Comply with requested state externalization and conditional placement flow.
+
+### Plain English Summary
+
+Moved the ship placement counter into `gameState.js` with increment and reset methods while retaining `sizes` locally in `randomizeShips.js`, and refactored random placement to check `placeShip` directly instead of catching errors.
+
+---
+
+## Request #28 — 2026-11-09
+
+- **Technical Summary**: Replaced `try/catch` with boolean return checks for valid game outcomes across `Gameboard.js` and `placeShip.js`, reserving `throw` strictly for invalid parameter types/formats.
+- **Modified Files**:
+  - `src/Classes/Gameboard.js`:
+    - In `placeShip`: Added parameter type/format checks to throw errors for lengths not between 2 and 5, coordinates not matching `[0-9, 0-9]`, and direction not equal to `"v"` or `"h"`. Changed ship limit reach (`>= 5`) and invalid position (`#validatePossibilities`) to return `false` instead of throwing.
+    - In `receiveAttack`: Added parameter validation throwing for coordinates not matching `[0-9, 0-9]`, and changed attacking an already attacked position to return `false` instead of throwing.
+    - _Why_: Align method contracts with standard practices by reserving exceptions for programming contract violations and using boolean statuses for normal game logic outcomes.
+  - `src/ui/components/placeShip.js`: Replaced `try/catch` block wrapping `placeShip` with an `if/else` condition checking the boolean return value.
+    - _Why_: Avoid exception-driven control flow in the UI event handler.
+
+### Plain English Summary
+
+Updated `Gameboard.js` so that `placeShip` and `receiveAttack` throw errors exclusively for malformed parameters (length, coordinates, direction) while returning `false` for game-rule violations like illegal positions, full fleets, or repeated attacks. Refactored the UI `placeShip` handler to use an `if/else` check instead of `try/catch`.
