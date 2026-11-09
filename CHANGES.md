@@ -406,3 +406,43 @@ Moved the ship placement counter into `gameState.js` with increment and reset me
 ### Plain English Summary
 
 Updated `Gameboard.js` so that `placeShip` and `receiveAttack` throw errors exclusively for malformed parameters (length, coordinates, direction) while returning `false` for game-rule violations like illegal positions, full fleets, or repeated attacks. Refactored the UI `placeShip` handler to use an `if/else` check instead of `try/catch`.
+
+---
+
+## Request #29 — 2026-11-09
+
+- **Technical Summary**: Refactored `attackGrid.js` by extracting computer attack logic into separate modular files (`attackPlayerGrid.js` and `anchorShip.js`) and replaced `try/catch` with a boolean conditional check.
+- **Modified Files**:
+  - `src/logic/anchorShip.js`: Extracted ship tracking and targeted adjacent attack logic into a standalone function module.
+    - _Why_: Separate concern of directional ship hunting from general board attack orchestration.
+  - `src/logic/attackPlayerGrid.js`: Extracted `attackPlayerGrid(player)` into its own module, removed `try/catch` around `player.Gameboard.receiveAttack([randomX, randomY])` in favor of an `if` condition, and delegated locked ship attacks to `anchorShip(player)`.
+    - _Why_: Modularize computer player attack loop and use direct boolean checks instead of exceptions for attack validation.
+  - `src/logic/attackGrid.js`: Removed local `attackPlayerGrid` declaration and unused imports, importing `attackPlayerGrid` from its new module.
+    - _Why_: Maintain single responsibility and lean module definition for `attackGrid`.
+
+### Plain English Summary
+
+Refactored `attackGrid.js` into separate modules by extracting `attackPlayerGrid` and `anchorShip` into their own files under `src/logic/`, and converted the random computer attack execution from a `try/catch` block into an `if` conditional check.
+
+---
+
+## Request #30 — 2026-11-09
+
+- **Technical Summary**: Extracted DOM status updates and attack result rendering into dedicated UI components, separating UI updates from core attack logic.
+- **Modified Files**:
+  - `src/ui/components/changeStatus.js`: Created helper to update pointer events and turn status text based on turn parameter (`"c"` or `"p"`).
+    - _Why_: Centralize turn status indicators and board interactivity toggles.
+  - `src/ui/components/renderAttackResult.js`: Created UI module to query player cell button, update symbol (`"X"` or `"🔥"`), and lock ship anchor state.
+    - _Why_: Decouple random computer attack logic from direct DOM cell manipulations.
+  - `src/ui/components/renderComputerAttackResult.js`: Created UI module to update player cell button on targeted ship anchor attacks.
+    - _Why_: Decouple anchor attack direction logic from direct DOM cell updates.
+  - `src/logic/attackGrid.js`: Replaced direct status queries and pointer events assignment with `changeStatus("c")`.
+    - _Why_: Delegate status presentation to UI module.
+  - `src/logic/attackPlayerGrid.js`: Replaced DOM cell queries and status updates with `renderAttackResult` and `changeStatus("p")`.
+    - _Why_: Isolate computer attack sequence from DOM queries.
+  - `src/logic/anchorShip.js`: Replaced DOM cell queries and status updates with `renderComputerAttackResult` and `changeStatus("p")`.
+    - _Why_: Isolate ship-targeting logic from DOM manipulation.
+
+### Plain English Summary
+
+Created `changeStatus`, `renderAttackResult`, and `renderComputerAttackResult` inside `src/ui/components/` to handle DOM updates for player and computer turns, and refactored `attackGrid.js`, `attackPlayerGrid.js`, and `anchorShip.js` to call these presentation modules instead of mutating DOM elements directly.
