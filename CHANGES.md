@@ -446,3 +446,49 @@ Refactored `attackGrid.js` into separate modules by extracting `attackPlayerGrid
 ### Plain English Summary
 
 Created `changeStatus`, `renderAttackResult`, and `renderComputerAttackResult` inside `src/ui/components/` to handle DOM updates for player and computer turns, and refactored `attackGrid.js`, `attackPlayerGrid.js`, and `anchorShip.js` to call these presentation modules instead of mutating DOM elements directly.
+
+---
+
+## Request #31 — 2026-11-10
+
+- **Technical Summary**: Added water drop, explosion, and click sound effect assets and integrated audio playback into attack handling and UI dialog/button interactions.
+- **Modified Files**:
+  - `assets/water-drop.wav`: Added synthesized PCM audio asset for water drops.
+    - _Why_: Audio feedback for attacks hitting empty water cells.
+  - `assets/explosion.wav`: Added synthesized PCM audio asset for explosions.
+    - _Why_: Audio feedback for attacks hitting ships.
+  - `assets/click.wav`: Added synthesized PCM audio asset for button clicks.
+    - _Why_: Audio feedback for UI button interactions.
+  - `webpack.common.js`: Extended asset resource loader rule to match `.wav` and `.mp3` extensions.
+    - _Why_: Allow Webpack to resolve and bundle imported audio assets.
+  - `src/logic/attackGrid.js`: Added audio playback playing `waterDropSound` on miss and `explosionSound` on hit.
+    - _Why_: Provide audio feedback on player attack actions.
+  - `src/logic/attackPlayerGrid.js`: Added audio playback playing `waterDropSound` on computer miss and `explosionSound` on computer hit.
+    - _Why_: Provide audio feedback on computer attack actions.
+  - `src/ui/main/home.js`: Added `clickSound` playback to Axis, ship selection, Randomize, Reset, and Play button clicks.
+    - _Why_: Provide interactive audio feedback for setup controls.
+  - `src/ui/components/errorDialog.js`: Added `clickSound` playback to the "OK" button click.
+    - _Why_: Provide interactive audio feedback when closing error dialogs.
+  - `src/ui/components/overDialog.js`: Added `clickSound` playback to the "Close" and "X" button clicks.
+    - _Why_: Provide interactive audio feedback when interacting with game over / leave dialogs.
+
+### Plain English Summary
+
+Created audio sound effect files for water drops, explosions, and button clicks in `assets/`, configured Webpack to bundle audio files as resource assets, and wired up sound playback across player and computer attack logic as well as UI buttons across the home screen and dialogs.
+
+---
+
+## Request #32 — 2026-11-10
+
+- **Technical Summary**: Replaced synthesized sound assets with high-fidelity acoustic recordings from Wyzowl SFX Kit (CC0).
+- **Modified Files**:
+  - `assets/click.wav`: Replaced with `click-button-medium.wav` (tactile 48kHz PCM button click).
+    - _Why_: Realistic UI button click response.
+  - `assets/water-drop.wav`: Replaced with `props-splash.wav` (authentic water splash recording).
+    - _Why_: Realistic water splash feedback for missed attacks.
+  - `assets/explosion.wav`: Replaced with `impact-deep-hard.wav` (deep resonant impact/crack).
+    - _Why_: Realistic impact/explosion feedback on hit ships.
+
+### Plain English Summary
+
+Replaced the synthesized audio files in `assets/` with professionally mastered, CC0 public-domain acoustic recordings for the click, splash, and explosion sound effects.

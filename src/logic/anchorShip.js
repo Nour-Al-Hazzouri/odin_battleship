@@ -11,6 +11,8 @@ import gameStateReset from "./gameStateReset.js";
 import attackPlayerGrid from "./attackPlayerGrid.js";
 import changeStatus from "../ui/components/changeStatus.js";
 import renderComputerAttackResult from "../ui/components/renderComputerAttackResult.js";
+import waterDropSound from "../../assets/water-drop.wav";
+import explosionSound from "../../assets/explosion.wav";
 
 export default function anchorShip(player) {
   const state = getState();
@@ -28,6 +30,11 @@ export default function anchorShip(player) {
     player.Gameboard.receiveAttack([posX, posY]);
 
     renderComputerAttackResult(posX, posY, wasShipHit);
+    if (!wasShipHit) {
+      new Audio(waterDropSound).play();
+    } else {
+      new Audio(explosionSound).play();
+    }
     changeStatus("p");
 
     if (player.Gameboard.AllShipsStatus) {

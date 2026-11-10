@@ -1,6 +1,7 @@
 // visualize placed ships on the player board
 import { getShipDetails, updateShipDetails } from "../../logic/gameState.js";
 import { createErrorDialog } from "./errorDialog.js";
+import placeShipSound from "../../../assets/place-ship.wav";
 
 export default function placeShip(player, board) {
   // board should be a div with 100 buttons created through './grid.js'
@@ -13,6 +14,7 @@ export default function placeShip(player, board) {
       if (
         player.Gameboard.placeShip(selectedShip.size, [row, col], orientation)
       ) {
+        new Audio(placeShipSound).play();
         // check oriantation and change bg clr for each cell based on ship size
         for (let i = 0; i < selectedShip.size; i++) {
           const r = orientation === "v" ? row + i : row;

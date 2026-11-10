@@ -1,5 +1,6 @@
 // error dialog to force user into home screen
 import { renderHome } from "../main/home.js";
+import clickSound from "../../../assets/click.wav";
 
 export function createOverDialog(message, closeButton) {
   const dialog = document.createElement("dialog");
@@ -10,6 +11,7 @@ export function createOverDialog(message, closeButton) {
     xButton.classList.add("close-x-btn");
     xButton.textContent = "X";
     xButton.addEventListener("click", () => {
+      new Audio(clickSound).play();
       dialog.close();
       dialog.remove();
     });
@@ -23,6 +25,7 @@ export function createOverDialog(message, closeButton) {
   const okayButton = document.createElement("button");
   okayButton.textContent = "Close";
   okayButton.addEventListener("click", () => {
+    new Audio(clickSound).play();
     dialog.close();
     dialog.remove();
     renderHome();

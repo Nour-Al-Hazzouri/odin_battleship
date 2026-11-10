@@ -3,6 +3,8 @@ import { getState } from "./gameState.js";
 import anchorShip from "./anchorShip.js";
 import changeStatus from "../ui/components/changeStatus.js";
 import renderAttackResult from "../ui/components/renderAttackResult.js";
+import waterDropSound from "../../assets/water-drop.wav";
+import explosionSound from "../../assets/explosion.wav";
 
 export default function attackPlayerGrid(player) {
   // get global state to work with it each round
@@ -15,6 +17,11 @@ export default function attackPlayerGrid(player) {
       const randomY = Math.floor(Math.random() * 10);
       if (player.Gameboard.receiveAttack([randomX, randomY])) {
         renderAttackResult(player, randomX, randomY);
+        if (player.Board[randomX][randomY].Ship === null) {
+          new Audio(waterDropSound).play();
+        } else {
+          new Audio(explosionSound).play();
+        }
         changeStatus("p");
 
         attackSuccessful = true;
