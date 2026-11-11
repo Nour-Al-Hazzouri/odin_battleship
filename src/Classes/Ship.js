@@ -1,3 +1,7 @@
+/**
+ * Represents a battleship with a set length.
+ * Tracks received hits and evaluates whether the ship has sunk.
+ */
 class Ship {
   #length;
   #hitCount = 0;

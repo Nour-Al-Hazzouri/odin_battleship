@@ -4,7 +4,11 @@ import changeStatus from "../ui/components/changeStatus.js";
 import waterDropSound from "../../assets/water-drop.wav";
 import explosionSound from "../../assets/explosion.wav";
 
-// detect each attacked cell to render correct information
+/**
+ * Handles the human player attacking a specific cell on the computer's grid.
+ * Updates model state, plays audio feedback, checks win conditions,
+ * and schedules the computer's response attack.
+ */
 export default function attackGrid(player, computer, e) {
   // modify computer board based on player's click events
   const target = e.target;
@@ -24,7 +28,7 @@ export default function attackGrid(player, computer, e) {
     return;
   }
   changeStatus("c");
-  // wait 1.5s before computer's attack on player's board
+  // Brief delay gives the player time to observe their attack before the computer responds
   setTimeout(() => {
     attackPlayerGrid(player);
   }, 1500);

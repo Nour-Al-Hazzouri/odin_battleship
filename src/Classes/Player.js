@@ -1,5 +1,10 @@
 import Gameboard from "./Gameboard.js";
 import { createBoardGrid } from "../ui/components/grid.js";
+
+/**
+ * Represents a game participant (human player 'p' or computer 'c').
+ * Owns a Gameboard model instance and a corresponding DOM board grid.
+ */
 class Player {
   #type;
   #gameboard = new Gameboard();

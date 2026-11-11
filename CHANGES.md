@@ -525,3 +525,28 @@ Replaced the synthesized audio files in `assets/` with professionally mastered, 
 ### Plain English Summary
 
 Refactored the game's shared state management in `gameState.js` into three isolated factory functions: one for DOM query caching, one for the computer AI's ship-hunting targeting state, and one for ship placement and orientation. Removed the standalone `gameStateReset.js` helper since each factory instance now encapsulates its own `.reset()` logic, and updated all importing UI and logic modules to interact with these dedicated state instances.
+
+---
+
+## Request #34 — 2026-11-11
+
+- **Technical Summary**: Added clean-code doc comments and JSDoc annotations across model classes, state factories, game initiation logic, and UI components.
+- **Modified Files**:
+  - `src/Classes/Node.js`: Added class-level JSDoc explaining the responsibility of board grid cell nodes (ship occupancy and hit tracking).
+    - _Why_: Clarify model semantics for individual grid slots.
+  - `src/Classes/Player.js`: Added class-level JSDoc explaining player type, board model association, and DOM grid ownership.
+    - _Why_: Document the relationship between model and DOM representation per participant.
+  - `src/Classes/Ship.js`: Added class-level JSDoc describing length, health, hit tracking, and sink evaluation.
+    - _Why_: Document ship domain rules cleanly.
+  - `src/logic/gameState.js`: Added doc comments to `defaultAnchorPositions`, `createQueryState`, `createTargetingState`, and `createShipPlacementState`.
+    - _Why_: Document purpose, scope, and isolated concerns for each state factory.
+  - `src/logic/gameInitiator.js`: Added JSDoc explaining the transition from ship placement setup to active battle view.
+    - _Why_: Document high-level lifecycle transition.
+  - `src/logic/attackGrid.js`: Added JSDoc for attack handling and explanatory comment on the computer attack delay timing.
+    - _Why_: Explain player-to-computer turn transition logic.
+  - `src/ui/components/renderComputerAttackResult.js`: Added function-level doc comment explaining DOM visual feedback on computer moves.
+    - _Why_: Document UI rendering behavior.
+
+### Plain English Summary
+
+Reviewed codebase documentation against clean-code best practices and added concise JSDoc and context comments across core classes (`Node`, `Player`, `Ship`), state factory functions, attack flow routines, and UI renderers to clarify intent without cluttering code with redundant line-by-line noise.

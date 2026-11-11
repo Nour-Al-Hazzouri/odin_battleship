@@ -1,3 +1,7 @@
+/**
+ * Default relative coordinate offsets for AI ship targeting.
+ * Probes the 4 cardinal directions (up, left, down, right).
+ */
 const defaultAnchorPositions = () => [
   [0, -1],
   [-1, 0],
@@ -5,6 +9,10 @@ const defaultAnchorPositions = () => [
   [+1, 0],
 ];
 
+/**
+ * Factory creating an isolated state container for cached DOM element queries.
+ * Prevents redundant DOM lookups during gameplay updates.
+ */
 export function createQueryState() {
   let queries = {
     computerGrid: null,
@@ -85,6 +93,7 @@ export function createShipPlacementState() {
   };
 }
 
+// Standard fleet configuration
 const ships = [
   { name: "Carrier", size: 5, id: "carrier" },
   { name: "Battleship", size: 4, id: "battleship" },
@@ -95,6 +104,7 @@ const ships = [
 
 export const getShips = () => ships;
 
+// Export default instances for active game session
 export const queryState = createQueryState();
 export const targetingState = createTargetingState();
 export const shipPlacementState = createShipPlacementState();
