@@ -1,2 +1,4 @@
 import "./styles.css";
-document.addEventListener("DOMContentLoaded", console.log("Hi"));
+import { renderHome } from "./ui/main/home.js";
+
+renderHome();

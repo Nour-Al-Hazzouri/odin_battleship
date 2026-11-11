@@ -1,64 +1,137 @@
 import Gameboard from "./Gameboard.js";
 
 describe("Board Functionalities", () => {
-  describe("Placing a ship", () => {
-    const gameboard = new Gameboard();
+  let gameboard;
+  // start the gameboard with a fresh state inside each 'it'
+  beforeEach(() => {
+    gameboard = new Gameboard();
+  });
+
+  describe("Validating Coordinates", () => {
     it("should throw error for invalid coordinates", () => {
       expect(() => gameboard.placeShip(3, [10, -9], "h")).toThrow(
-        new Error("out-of-bound coordinates are not acceptable"),
+        new Error("coordinates must be [0-9, 0-9]"),
       );
       expect(() => gameboard.placeShip(3, [10, 8], "h")).toThrow(
-        new Error("out-of-bound coordinates are not acceptable"),
+        new Error("coordinates must be [0-9, 0-9]"),
       );
       expect(() => gameboard.placeShip(3, [-1, 5], "h")).toThrow(
-        new Error("out-of-bound coordinates are not acceptable"),
+        new Error("coordinates must be [0-9, 0-9]"),
       );
     });
-    it("should throw an error for valid coordinates but invalid ship position", () => {
+  });
+  describe("Placing a ship", () => {
+    it("should return false for invalid ship position", () => {
       // out-of-bound cases
-      expect(() => gameboard.placeShip(3, [9, 9], "v")).toThrow(
-        new Error("invalid ship position"),
-      );
-      expect(() => gameboard.placeShip(5, [0, 6], "h")).toThrow(
-        new Error("invalid ship position"),
-      );
-      expect(() => gameboard.placeShip(2, [9, 2], "v")).toThrow(
-        new Error("invalid ship position"),
-      );
-      expect(() => gameboard.placeShip(4, [0, 9], "h")).toThrow(
-        new Error("invalid ship position"),
-      );
+      expect(gameboard.placeShip(3, [9, 9], "v")).toBe(false);
+      expect(gameboard.placeShip(5, [0, 6], "h")).toBe(false);
+      expect(gameboard.placeShip(2, [9, 2], "v")).toBe(false);
+      expect(gameboard.placeShip(4, [0, 9], "h")).toBe(false);
       // ships overlapping cases
       gameboard.placeShip(5, [4, 4], "h"); // Ship 1 (h, len 5): occupies [4, 4] to [4, 8]
       // Vertical ship overlapping with horizontal ship
-      expect(() => gameboard.placeShip(5, [3, 4], "v")).toThrow(
-        new Error("invalid ship position"),
-      ); // v (len 5): tries to occupy [3, 4] to [7, 4], overlaps at [4, 4]
-      expect(() => gameboard.placeShip(3, [2, 6], "v")).toThrow(
-        new Error("invalid ship position"),
-      ); // v (len 3): tries to occupy [2, 6] to [4, 6], overlaps at [4, 6]
+      expect(gameboard.placeShip(5, [3, 4], "v")).toBe(false); // v (len 5): tries to occupy [3, 4] to [7, 4], overlaps at [4, 4]
+      expect(gameboard.placeShip(3, [2, 6], "v")).toBe(false); // v (len 3): tries to occupy [2, 6] to [4, 6], overlaps at [4, 6]
 
       // Horizontal ship overlapping with horizontal ship
-      expect(() => gameboard.placeShip(3, [4, 2], "h")).toThrow(
-        new Error("invalid ship position"),
-      ); // h (len 3): tries to occupy [4, 2] to [4, 4], overlaps at [4, 4]
+      expect(gameboard.placeShip(3, [4, 2], "h")).toBe(false); // h (len 3): tries to occupy [4, 2] to [4, 4], overlaps at [4, 4]
 
       gameboard.placeShip(4, [1, 1], "v"); // Ship 2 (v, len 4): occupies [1, 1] to [4, 1]
       // Vertical ship overlapping with vertical ship
-      expect(() => gameboard.placeShip(2, [3, 1], "v")).toThrow(
-        new Error("invalid ship position"),
-      ); // v (len 2): tries to occupy [3, 1] to [4, 1], overlaps at [3, 1] and [4, 1]
+      expect(gameboard.placeShip(2, [3, 1], "v")).toBe(false); // v (len 2): tries to occupy [3, 1] to [4, 1], overlaps at [3, 1] and [4, 1]
 
       // Horizontal ship overlapping with vertical ship
-      expect(() => gameboard.placeShip(2, [2, 0], "h")).toThrow(
-        new Error("invalid ship position"),
-      ); // h (len 2): tries to occupy [2, 0] to [2, 1], overlaps at [2, 1]
+      expect(gameboard.placeShip(2, [2, 0], "h")).toBe(false); // h (len 2): tries to occupy [2, 0] to [2, 1], overlaps at [2, 1]
     });
-    it("should return true for valid coordinates and valid ship position", () => {
-      expect(() => gameboard.placeShip(4, [0, 0], "h")).toBeTruthy();
-      expect(() => gameboard.placeShip(5, [9, 2], "v")).toBeTruthy();
-      expect(() => gameboard.placeShip(2, [4, 3], "h")).toBeTruthy();
-      expect(() => gameboard.placeShip(3, [6, 6], "v")).toBeTruthy();
+    it("should return true for valid coordinates ship position", () => {
+      expect(gameboard.placeShip(4, [0, 0], "h")).toBe(true);
+      expect(gameboard.placeShip(5, [2, 2], "v")).toBe(true);
+      expect(gameboard.placeShip(3, [6, 6], "v")).toBe(true);
+    });
+    it("should clear the board when the clearBoard method is ran", () => {
+      gameboard.placeShip(2, [0, 0], "h");
+      gameboard.placeShip(3, [1, 0], "h");
+      gameboard.placeShip(3, [2, 0], "h");
+      gameboard.placeShip(4, [3, 0], "h");
+      gameboard.placeShip(5, [4, 0], "h");
+      expect(gameboard.Ships.length).toBe(5);
+      gameboard.resetBoard();
+      expect(gameboard.Ships.length).toBe(0);
+    });
+  });
+  it("should not allow more than 5 ships", () => {
+    gameboard.placeShip(2, [0, 0], "h");
+    gameboard.placeShip(3, [1, 0], "h");
+    gameboard.placeShip(3, [2, 0], "h");
+    gameboard.placeShip(4, [3, 0], "h");
+    gameboard.placeShip(5, [4, 0], "h");
+    expect(gameboard.placeShip(5, [5, 0], "h")).toBe(false);
+  });
+  describe("Receiving Attacks", () => {
+    it("should correctly update the hit status for attacked slots and ships", () => {
+      const board = gameboard.Board;
+      // place ships to correctly test functionality
+      gameboard.placeShip(4, [3, 4], "h");
+      gameboard.placeShip(3, [5, 1], "v");
+      gameboard.placeShip(2, [7, 9], "v");
+      // receive attacks on ships parts
+      gameboard.receiveAttack([3, 4]);
+      gameboard.receiveAttack([5, 1]);
+      gameboard.receiveAttack([7, 9]);
+      // ensure both the slot and the ship record the hit
+      expect(board[3][4].HitStatus).toBeTruthy();
+      expect(board[5][1].HitStatus).toBeTruthy();
+      expect(board[7][9].HitStatus).toBeTruthy();
+      expect(board[3][4].Ship.HitCount).toBe(1);
+      expect(board[5][1].Ship.HitCount).toBe(1);
+      expect(board[7][9].Ship.HitCount).toBe(1);
+      // check missed shots with ship-less slots
+      gameboard.receiveAttack([9, 9]);
+      expect(board[9][9].HitStatus).toBeTruthy();
+      expect(board[9][9].Ship).toBeNull();
+    });
+    it("should return false when attacking an already attacked position", () => {
+      gameboard.receiveAttack([2, 3]);
+      expect(gameboard.receiveAttack([2, 3])).toBe(false);
+    });
+    it("should report when all ships have been sunk", () => {
+      // 5 ships of standard sizes (5, 4, 3, 3, 2) placed non-overlapping
+      gameboard.placeShip(5, [0, 0], "h"); // (0,0) to (0,4)
+      gameboard.placeShip(4, [1, 0], "h"); // (1,0) to (1,3)
+      gameboard.placeShip(3, [2, 0], "h"); // (2,0) to (2,2)
+      gameboard.placeShip(3, [3, 0], "h"); // (3,0) to (3,2)
+      gameboard.placeShip(2, [4, 0], "h"); // (4,0) to (4,1)
+
+      expect(gameboard.allShipsStatus).toBeFalsy();
+
+      // Attack ship 1 (size 5)
+      gameboard.receiveAttack([0, 0]);
+      gameboard.receiveAttack([0, 1]);
+      gameboard.receiveAttack([0, 2]);
+      gameboard.receiveAttack([0, 3]);
+      gameboard.receiveAttack([0, 4]);
+
+      // Attack ship 2 (size 4)
+      gameboard.receiveAttack([1, 0]);
+      gameboard.receiveAttack([1, 1]);
+      gameboard.receiveAttack([1, 2]);
+      gameboard.receiveAttack([1, 3]);
+
+      // Attack ship 3 (size 3)
+      gameboard.receiveAttack([2, 0]);
+      gameboard.receiveAttack([2, 1]);
+      gameboard.receiveAttack([2, 2]);
+
+      // Attack ship 4 (size 3)
+      gameboard.receiveAttack([3, 0]);
+      gameboard.receiveAttack([3, 1]);
+      gameboard.receiveAttack([3, 2]);
+
+      // Attack ship 5 (size 2)
+      gameboard.receiveAttack([4, 0]);
+      gameboard.receiveAttack([4, 1]);
+
+      expect(gameboard.AllShipsStatus).toBeTruthy();
     });
   });
 });

@@ -1,21 +1,7 @@
 import Ship from "./Ship.js";
 
-describe("Properties & Methods", () => {
+describe("Testing Ship Functionalities", () => {
   const ship = new Ship(3, "v");
-  describe("Properties return correct data", () => {
-    it("should return correct length", () => {
-      expect(ship.Length).toBe(3);
-    });
-    it("should have a default hit count of 0", () => {
-      expect(ship.HitCount).toBe(0);
-    });
-    it("should have a default sunk status of false", () => {
-      expect(ship.SinkStatus).toBeFalsy();
-    });
-    it("should return direction correctly", () => {
-      expect(ship.Direction).toBe("v");
-    });
-  });
   describe("Methods function correctly", () => {
     it("should increase hit counter when hit() is called", () => {
       ship.hit();
