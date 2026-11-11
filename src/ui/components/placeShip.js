@@ -1,5 +1,5 @@
 // visualize placed ships on the player board
-import { getShipDetails, updateShipDetails } from "../../logic/gameState.js";
+import { shipPlacementState } from "../../logic/gameState.js";
 import { createErrorDialog } from "./errorDialog.js";
 import placeShipSound from "../../../assets/place-ship.wav";
 
@@ -7,7 +7,7 @@ export default function placeShip(player, board) {
   // board should be a div with 100 buttons created through './grid.js'
   for (const cellBtn of board.children) {
     cellBtn.addEventListener("click", () => {
-      const { selectedShip, orientation } = getShipDetails();
+      const { selectedShip, orientation } = shipPlacementState.getShipDetails();
       if (!selectedShip) return;
       const [row, col] = JSON.parse(cellBtn.dataset.coordinates);
       // check if a ship is placeable
@@ -25,7 +25,7 @@ export default function placeShip(player, board) {
         // disable placed ship button to avoid exceeding limit
         const queriedShip = document.querySelector(`#${selectedShip.id}`);
         queriedShip.disabled = true;
-        updateShipDetails({ selectedShip: null });
+        shipPlacementState.updateShipDetails({ selectedShip: null });
       } else {
         // notify user move is invalid
         const errorDialog = createErrorDialog("The move was illegal");

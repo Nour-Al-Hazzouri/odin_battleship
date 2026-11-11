@@ -1,4 +1,4 @@
-import { updateShipDetails } from "../../logic/gameState.js";
+import { shipPlacementState } from "../../logic/gameState.js";
 
 export default function resetShipSelection() {
   const selectedShip = document.querySelector(".selected");
@@ -9,5 +9,5 @@ export default function resetShipSelection() {
   cells.forEach((cell) => {
     cell.style.backgroundColor = "";
   });
-  updateShipDetails({ selectedShip: null });
+  shipPlacementState.updateShipDetails({ selectedShip: null });
 }

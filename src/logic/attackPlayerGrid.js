@@ -1,5 +1,5 @@
 import { showGameOverDialog } from "./gameController.js";
-import { getState } from "./gameState.js";
+import { targetingState } from "./gameState.js";
 import anchorShip from "./anchorShip.js";
 import changeStatus from "../ui/components/changeStatus.js";
 import renderAttackResult from "../ui/components/renderAttackResult.js";
@@ -8,7 +8,7 @@ import explosionSound from "../../assets/explosion.wav";
 
 export default function attackPlayerGrid(player) {
   // get global state to work with it each round
-  const state = getState();
+  const state = targetingState.getState();
   // attack randomly if no ship is locked by the global state
   if (!state.shipLocked) {
     let attackSuccessful = false;

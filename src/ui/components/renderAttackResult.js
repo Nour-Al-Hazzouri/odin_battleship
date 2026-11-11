@@ -1,4 +1,4 @@
-import { updateState } from "../../logic/gameState.js";
+import { targetingState } from "../../logic/gameState.js";
 
 export default function renderAttackResult(player, x, y) {
   const playerCell = document.querySelector(
@@ -9,7 +9,7 @@ export default function renderAttackResult(player, x, y) {
       playerCell.textContent = "X";
     } else {
       playerCell.textContent = "🔥";
-      updateState({
+      targetingState.updateState({
         originalAnchor: [x, y],
         currentAnchor: [x, y],
         shipLocked: true,

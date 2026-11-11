@@ -1,13 +1,6 @@
 import { showGameOverDialog } from "./gameController.js";
-import {
-  getState,
-  updateState,
-  anchorPositions,
-  shiftAnchorPosition,
-  updateAnchorPosition,
-} from "./gameState.js";
+import { targetingState } from "./gameState.js";
 import validateCoordinates from "./validateCoordinates.js";
-import gameStateReset from "./gameStateReset.js";
 import attackPlayerGrid from "./attackPlayerGrid.js";
 import changeStatus from "../ui/components/changeStatus.js";
 import renderComputerAttackResult from "../ui/components/renderComputerAttackResult.js";
@@ -15,9 +8,10 @@ import waterDropSound from "../../assets/water-drop.wav";
 import explosionSound from "../../assets/explosion.wav";
 
 export default function anchorShip(player) {
-  const state = getState();
+  const state = targetingState.getState();
   const currentAnchor = state.currentAnchor;
   const originalAnchor = state.originalAnchor;
+  const anchorPositions = targetingState.getAnchorPositions();
   // 1. add anchorPosition[0] with currentAnchor to go to current position
   const positionAnchor = currentAnchor.map(
     (anchor, i) => anchor + anchorPositions[0][i],
@@ -46,7 +40,7 @@ export default function anchorShip(player) {
     if (wasShipHit) {
       const hitShip = player.Board[posX][posY].Ship;
       if (hitShip && hitShip.isSunk()) {
-        gameStateReset();
+        targetingState.reset();
       } else {
         let [offsetX, offsetY] = anchorPositions[0];
         if (offsetX === 0) {
@@ -56,24 +50,24 @@ export default function anchorShip(player) {
           if (offsetX < 0) offsetX -= 1;
           else if (offsetX > 0) offsetX += 1;
         }
-        updateAnchorPosition([offsetX, offsetY]);
+        targetingState.updateAnchorPosition([offsetX, offsetY]);
       }
     } else {
       // missed: shift anchor position and switch to next direction from originalAnchor
-      shiftAnchorPosition();
+      targetingState.shiftAnchorPosition();
       if (anchorPositions.length > 0) {
-        updateState({ currentAnchor: originalAnchor });
+        targetingState.updateState({ currentAnchor: originalAnchor });
       } else {
-        gameStateReset();
+        targetingState.reset();
       }
     }
   } else {
     // coordinate invalid or already attacked: shift direction and retry
-    shiftAnchorPosition();
+    targetingState.shiftAnchorPosition();
     if (anchorPositions.length > 0) {
-      updateState({ currentAnchor: originalAnchor });
+      targetingState.updateState({ currentAnchor: originalAnchor });
     } else {
-      gameStateReset();
+      targetingState.reset();
     }
     attackPlayerGrid(player);
   }

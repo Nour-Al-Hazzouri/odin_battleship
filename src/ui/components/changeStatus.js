@@ -1,7 +1,7 @@
-import { getQueries } from "../../logic/gameState.js";
+import { queryState } from "../../logic/gameState.js";
 
 export default function changeStatus(turn) {
-  const queries = getQueries();
+  const queries = queryState.getQueries();
   if (turn === "c") {
     queries.computerGrid.style.pointerEvents = "none";
     queries.playerStatus.textContent = "Computer's turn...";

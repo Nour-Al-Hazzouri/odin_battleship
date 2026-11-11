@@ -492,3 +492,36 @@ Created audio sound effect files for water drops, explosions, and button clicks 
 ### Plain English Summary
 
 Replaced the synthesized audio files in `assets/` with professionally mastered, CC0 public-domain acoustic recordings for the click, splash, and explosion sound effects.
+
+---
+
+## Request #33 — 2026-11-11
+
+- **Technical Summary**: Refactored `gameState.js` from top-level singleton state variables into dedicated factory functions (`createQueryState`, `createTargetingState`, `createShipPlacementState`) with internal closure state and instance reset capabilities; disposed of `gameStateReset.js`.
+- **Modified Files**:
+  - `src/logic/gameState.js`: Replaced module-level `let` variables with `createQueryState()`, `createTargetingState()`, and `createShipPlacementState()` factory functions encapsulating their respective domains in private closures, exposing instance methods and reset methods.
+    - _Why_: Encapsulate isolated state, prevent cross-domain state pollution, and allow straightforward resets.
+  - `src/logic/gameStateReset.js`: Deleted file.
+    - _Why_: Redundant now that `targetingState.reset()` handles AI targeting state resetting directly.
+  - `src/logic/anchorShip.js`: Replaced module-level state and anchor imports with `targetingState`, replacing `gameStateReset()` calls with `targetingState.reset()`.
+    - _Why_: Interface directly with the encapsulated targeting state instance.
+  - `src/logic/attackPlayerGrid.js`: Updated to read `targetingState.getState()`.
+    - _Why_: Access AI ship lock state from the targeting state instance.
+  - `src/ui/components/renderAttackResult.js`: Updated to mutate `targetingState` via `targetingState.updateState()`.
+    - _Why_: Update AI target coordinates through encapsulated state methods.
+  - `src/ui/main/home.js`: Replaced `updateShipDetails` with `shipPlacementState.updateShipDetails()`.
+    - _Why_: Use encapsulated ship placement state instance for orientation and selection.
+  - `src/ui/components/placeShip.js`: Replaced `getShipDetails` and `updateShipDetails` with `shipPlacementState` methods.
+    - _Why_: Retrieve and clear selected ship data from ship placement instance.
+  - `src/ui/components/resetShipSelection.js`: Replaced `updateShipDetails` with `shipPlacementState.updateShipDetails()`.
+    - _Why_: Clear ship selection in the ship placement instance.
+  - `src/logic/randomizeShips.js`: Replaced `getPlacedShips`, `incrementPlacedShips`, and `resetPlacedShips` imports with `shipPlacementState` methods.
+    - _Why_: Track placed ship counts within the ship placement state instance.
+  - `src/logic/gameController.js`: Replaced `updateQueries` with `queryState.updateQueries()`.
+    - _Why_: Store DOM element references within the queries state instance.
+  - `src/ui/components/changeStatus.js`: Replaced `getQueries` with `queryState.getQueries()`.
+    - _Why_: Access cached DOM element references through the queries state instance.
+
+### Plain English Summary
+
+Refactored the game's shared state management in `gameState.js` into three isolated factory functions: one for DOM query caching, one for the computer AI's ship-hunting targeting state, and one for ship placement and orientation. Removed the standalone `gameStateReset.js` helper since each factory instance now encapsulates its own `.reset()` logic, and updated all importing UI and logic modules to interact with these dedicated state instances.

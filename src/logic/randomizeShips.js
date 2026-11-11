@@ -1,16 +1,12 @@
-import {
-  getPlacedShips,
-  incrementPlacedShips,
-  resetPlacedShips,
-} from "./gameState.js";
+import { shipPlacementState } from "./gameState.js";
 
 // ensure 5 ships exactly are placed correctly
 export default function randomizeShips(player) {
   player.Gameboard.resetBoard();
-  resetPlacedShips();
+  shipPlacementState.resetPlacedShips();
   const sizes = [2, 3, 3, 4, 5];
-  while (getPlacedShips() <= 4)
-    boardPlaceShips(player, sizes[getPlacedShips()]);
+  while (shipPlacementState.getPlacedShips() <= 4)
+    boardPlaceShips(player, sizes[shipPlacementState.getPlacedShips()]);
 }
 // ensure the placedShips counter increment for ships not errors
 function boardPlaceShips(boardPlayer, size) {
@@ -22,7 +18,7 @@ function boardPlaceShips(boardPlayer, size) {
       orientation[Math.floor(Math.random() * 2)],
     )
   ) {
-    incrementPlacedShips();
+    shipPlacementState.incrementPlacedShips();
     return true;
   }
   return false;
