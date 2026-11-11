@@ -1,12 +1,12 @@
 import { createOverDialog } from "../ui/components/overDialog.js";
 import randomizeShips from "./randomizeShips.js";
 import attackGrid from "./attackGrid.js";
-import { updateQueries } from "./gameState.js";
+import { queryState } from "./gameState.js";
 import detectShips from "./detectShips.js";
 
 export function startBattleship(player, playerGrid, computer) {
   // update queries into global object to avoid constant re-calling
-  updateQueries({
+  queryState.updateQueries({
     computerGrid: document.querySelector(".computer-grid"),
     playerStatus: document.querySelector(".player-status-text"),
     computerStatus: document.querySelector(".computer-status-text"),

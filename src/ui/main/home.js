@@ -5,9 +5,10 @@ import { createErrorDialog } from "../components/errorDialog.js";
 import Player from "../../Classes/Player.js";
 import randomizeShips from "../../logic/randomizeShips.js";
 import placeShip from "../components/placeShip.js";
-import { updateShipDetails, getShips } from "../../logic/gameState.js";
+import { shipPlacementState, getShips } from "../../logic/gameState.js";
 import detectShips from "../../logic/detectShips.js";
 import toggleShipButtons from "../components/toggleShipButtons.js";
+import clickSound from "../../../assets/click.wav";
 
 // main function to render home page
 export function renderHome() {
@@ -36,12 +37,13 @@ export function renderHome() {
   axisBtn.classList.add("axis-btn");
   axisBtn.textContent = "HORIZONTAL";
   axisBtn.addEventListener("click", () => {
+    new Audio(clickSound).play();
     if (axisBtn.textContent === "HORIZONTAL") {
       axisBtn.textContent = "VERTICAL";
-      updateShipDetails({ orientation: "v" });
+      shipPlacementState.updateShipDetails({ orientation: "v" });
     } else {
       axisBtn.textContent = "HORIZONTAL";
-      updateShipDetails({ orientation: "h" });
+      shipPlacementState.updateShipDetails({ orientation: "h" });
     }
   });
   axisBtnContainer.appendChild(axisBtn);
@@ -57,12 +59,13 @@ export function renderHome() {
     button.textContent = `${ship.name} (${ship.size})`;
 
     button.addEventListener("click", () => {
+      new Audio(clickSound).play();
       const selected = document.querySelector(".selected");
       if (selected) {
         selected.classList.remove("selected");
       }
       button.classList.add("selected");
-      updateShipDetails({ selectedShip: ship });
+      shipPlacementState.updateShipDetails({ selectedShip: ship });
     });
 
     actualShipsGrid.append(button);
@@ -108,13 +111,18 @@ export function renderHome() {
   playBtnContainer.appendChild(playBtn);
 
   randomizeBtn.addEventListener("click", () => {
+    new Audio(clickSound).play();
     randomizeShips(player);
     detectShips(player, boardGrid);
     toggleShipButtons(true);
   });
-  resetBtn.addEventListener("click", () => player.Gameboard.resetBoard());
+  resetBtn.addEventListener("click", () => {
+    new Audio(clickSound).play();
+    player.Gameboard.resetBoard();
+  });
 
   playBtn.addEventListener("click", () => {
+    new Audio(clickSound).play();
     if (player.Gameboard.Ships.length < 5) {
       const error = createErrorDialog("Please place all ships before playing.");
       main.appendChild(error);

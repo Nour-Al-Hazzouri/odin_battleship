@@ -1,53 +1,99 @@
-// constant global queries used across game state
-let globalQueries = {
-  computerGrid: null,
-  playerStatus: null,
-  computerStatus: null,
-};
-
-export const updateQueries = (newQueries) => {
-  globalQueries = { ...globalQueries, ...newQueries };
-};
-
-export const getQueries = () => globalQueries;
-
-/*
-dynamic state used for the smart computer algorithm
-keep track of hit ships to sink them
-*/
-export const anchorPositions = [
+/**
+ * Default relative coordinate offsets for AI ship targeting.
+ * Probes the 4 cardinal directions (up, left, down, right).
+ */
+const defaultAnchorPositions = () => [
   [0, -1],
   [-1, 0],
   [0, +1],
   [+1, 0],
 ];
 
-export const shiftAnchorPosition = () => anchorPositions.shift();
-export const updateAnchorPosition = (value) => (anchorPositions[0] = value);
+/**
+ * Factory creating an isolated state container for cached DOM element queries.
+ * Prevents redundant DOM lookups during gameplay updates.
+ */
+export function createQueryState() {
+  let queries = {
+    computerGrid: null,
+    playerStatus: null,
+    computerStatus: null,
+  };
 
-let state = {
-  originalAnchor: null,
-  currentAnchor: null,
-  shipLocked: false,
-};
+  return {
+    getQueries: () => queries,
+    updateQueries: (newQueries) => {
+      queries = { ...queries, ...newQueries };
+    },
+    reset: () => {
+      queries = {
+        computerGrid: null,
+        playerStatus: null,
+        computerStatus: null,
+      };
+    },
+  };
+}
 
-export const updateState = (newState) => {
-  state = { ...state, ...newState };
-};
+export function createTargetingState() {
+  let anchorPositions = defaultAnchorPositions();
+  let state = {
+    originalAnchor: null,
+    currentAnchor: null,
+    shipLocked: false,
+  };
 
-export const getState = () => state;
+  return {
+    getState: () => state,
+    updateState: (newState) => {
+      state = { ...state, ...newState };
+    },
+    getAnchorPositions: () => anchorPositions,
+    shiftAnchorPosition: () => anchorPositions.shift(),
+    updateAnchorPosition: (value) => {
+      anchorPositions[0] = value;
+    },
+    reset: () => {
+      anchorPositions = defaultAnchorPositions();
+      state = {
+        originalAnchor: null,
+        currentAnchor: null,
+        shipLocked: false,
+      };
+    },
+  };
+}
 
-// preserve selected ship state to place it on board
-let shipDetails = {
-  selectedShip: null,
-  orientation: "h",
-};
+export function createShipPlacementState() {
+  let shipDetails = {
+    selectedShip: null,
+    orientation: "h",
+  };
+  let placedShips = 0;
 
-export const getShipDetails = () => shipDetails;
-export const updateShipDetails = (newDetails) => {
-  shipDetails = { ...shipDetails, ...newDetails };
-};
+  return {
+    getShipDetails: () => shipDetails,
+    updateShipDetails: (newDetails) => {
+      shipDetails = { ...shipDetails, ...newDetails };
+    },
+    getPlacedShips: () => placedShips,
+    incrementPlacedShips: () => {
+      placedShips += 1;
+    },
+    resetPlacedShips: () => {
+      placedShips = 0;
+    },
+    reset: () => {
+      shipDetails = {
+        selectedShip: null,
+        orientation: "h",
+      };
+      placedShips = 0;
+    },
+  };
+}
 
+// Standard fleet configuration
 const ships = [
   { name: "Carrier", size: 5, id: "carrier" },
   { name: "Battleship", size: 4, id: "battleship" },
@@ -57,3 +103,8 @@ const ships = [
 ];
 
 export const getShips = () => ships;
+
+// Export default instances for active game session
+export const queryState = createQueryState();
+export const targetingState = createTargetingState();
+export const shipPlacementState = createShipPlacementState();

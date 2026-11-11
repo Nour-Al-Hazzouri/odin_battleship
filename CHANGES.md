@@ -374,3 +374,192 @@ Extracted ship button disabling logic into a reusable `toggleShipButtons` UI com
 ### Plain English Summary
 
 Created a GitHub Actions workflow file that automatically runs the project build and pushes the compiled distribution files directly to the `gh-pages` branch whenever a pull request targeting `main` is opened or updated.
+
+---
+
+## Request #27 — 2026-11-09
+
+- **Technical Summary**: Moved `placedShips` state to `gameState.js` with an increment helper, kept `sizes` in `randomizeShips.js`, and replaced `try/catch` with a direct conditional check on `placeShip`.
+- **Modified Files**:
+  - `src/logic/gameState.js`: Added `placedShips` variable and accessor/mutator functions (`getPlacedShips`, `incrementPlacedShips`, `resetPlacedShips`).
+    - _Why_: Centralize ship placement counter state and provide controlled incremental mutation via a dedicated function.
+  - `src/logic/randomizeShips.js`: Replaced local `placedShips` declaration with imports from `gameState.js`, kept `sizes = [2, 3, 3, 4, 5]`, removed `try/catch` in `boardPlaceShips` in favor of evaluating `placeShip(...)` directly, incrementing `placedShips` on success, and returning boolean status.
+    - _Why_: Comply with requested state externalization and conditional placement flow.
+
+### Plain English Summary
+
+Moved the ship placement counter into `gameState.js` with increment and reset methods while retaining `sizes` locally in `randomizeShips.js`, and refactored random placement to check `placeShip` directly instead of catching errors.
+
+---
+
+## Request #28 — 2026-11-09
+
+- **Technical Summary**: Replaced `try/catch` with boolean return checks for valid game outcomes across `Gameboard.js` and `placeShip.js`, reserving `throw` strictly for invalid parameter types/formats.
+- **Modified Files**:
+  - `src/Classes/Gameboard.js`:
+    - In `placeShip`: Added parameter type/format checks to throw errors for lengths not between 2 and 5, coordinates not matching `[0-9, 0-9]`, and direction not equal to `"v"` or `"h"`. Changed ship limit reach (`>= 5`) and invalid position (`#validatePossibilities`) to return `false` instead of throwing.
+    - In `receiveAttack`: Added parameter validation throwing for coordinates not matching `[0-9, 0-9]`, and changed attacking an already attacked position to return `false` instead of throwing.
+    - _Why_: Align method contracts with standard practices by reserving exceptions for programming contract violations and using boolean statuses for normal game logic outcomes.
+  - `src/ui/components/placeShip.js`: Replaced `try/catch` block wrapping `placeShip` with an `if/else` condition checking the boolean return value.
+    - _Why_: Avoid exception-driven control flow in the UI event handler.
+
+### Plain English Summary
+
+Updated `Gameboard.js` so that `placeShip` and `receiveAttack` throw errors exclusively for malformed parameters (length, coordinates, direction) while returning `false` for game-rule violations like illegal positions, full fleets, or repeated attacks. Refactored the UI `placeShip` handler to use an `if/else` check instead of `try/catch`.
+
+---
+
+## Request #29 — 2026-11-09
+
+- **Technical Summary**: Refactored `attackGrid.js` by extracting computer attack logic into separate modular files (`attackPlayerGrid.js` and `anchorShip.js`) and replaced `try/catch` with a boolean conditional check.
+- **Modified Files**:
+  - `src/logic/anchorShip.js`: Extracted ship tracking and targeted adjacent attack logic into a standalone function module.
+    - _Why_: Separate concern of directional ship hunting from general board attack orchestration.
+  - `src/logic/attackPlayerGrid.js`: Extracted `attackPlayerGrid(player)` into its own module, removed `try/catch` around `player.Gameboard.receiveAttack([randomX, randomY])` in favor of an `if` condition, and delegated locked ship attacks to `anchorShip(player)`.
+    - _Why_: Modularize computer player attack loop and use direct boolean checks instead of exceptions for attack validation.
+  - `src/logic/attackGrid.js`: Removed local `attackPlayerGrid` declaration and unused imports, importing `attackPlayerGrid` from its new module.
+    - _Why_: Maintain single responsibility and lean module definition for `attackGrid`.
+
+### Plain English Summary
+
+Refactored `attackGrid.js` into separate modules by extracting `attackPlayerGrid` and `anchorShip` into their own files under `src/logic/`, and converted the random computer attack execution from a `try/catch` block into an `if` conditional check.
+
+---
+
+## Request #30 — 2026-11-09
+
+- **Technical Summary**: Extracted DOM status updates and attack result rendering into dedicated UI components, separating UI updates from core attack logic.
+- **Modified Files**:
+  - `src/ui/components/changeStatus.js`: Created helper to update pointer events and turn status text based on turn parameter (`"c"` or `"p"`).
+    - _Why_: Centralize turn status indicators and board interactivity toggles.
+  - `src/ui/components/renderAttackResult.js`: Created UI module to query player cell button, update symbol (`"X"` or `"🔥"`), and lock ship anchor state.
+    - _Why_: Decouple random computer attack logic from direct DOM cell manipulations.
+  - `src/ui/components/renderComputerAttackResult.js`: Created UI module to update player cell button on targeted ship anchor attacks.
+    - _Why_: Decouple anchor attack direction logic from direct DOM cell updates.
+  - `src/logic/attackGrid.js`: Replaced direct status queries and pointer events assignment with `changeStatus("c")`.
+    - _Why_: Delegate status presentation to UI module.
+  - `src/logic/attackPlayerGrid.js`: Replaced DOM cell queries and status updates with `renderAttackResult` and `changeStatus("p")`.
+    - _Why_: Isolate computer attack sequence from DOM queries.
+  - `src/logic/anchorShip.js`: Replaced DOM cell queries and status updates with `renderComputerAttackResult` and `changeStatus("p")`.
+    - _Why_: Isolate ship-targeting logic from DOM manipulation.
+
+### Plain English Summary
+
+Created `changeStatus`, `renderAttackResult`, and `renderComputerAttackResult` inside `src/ui/components/` to handle DOM updates for player and computer turns, and refactored `attackGrid.js`, `attackPlayerGrid.js`, and `anchorShip.js` to call these presentation modules instead of mutating DOM elements directly.
+
+---
+
+## Request #31 — 2026-11-10
+
+- **Technical Summary**: Added water drop, explosion, and click sound effect assets and integrated audio playback into attack handling and UI dialog/button interactions.
+- **Modified Files**:
+  - `assets/water-drop.wav`: Added synthesized PCM audio asset for water drops.
+    - _Why_: Audio feedback for attacks hitting empty water cells.
+  - `assets/explosion.wav`: Added synthesized PCM audio asset for explosions.
+    - _Why_: Audio feedback for attacks hitting ships.
+  - `assets/click.wav`: Added synthesized PCM audio asset for button clicks.
+    - _Why_: Audio feedback for UI button interactions.
+  - `webpack.common.js`: Extended asset resource loader rule to match `.wav` and `.mp3` extensions.
+    - _Why_: Allow Webpack to resolve and bundle imported audio assets.
+  - `src/logic/attackGrid.js`: Added audio playback playing `waterDropSound` on miss and `explosionSound` on hit.
+    - _Why_: Provide audio feedback on player attack actions.
+  - `src/logic/attackPlayerGrid.js`: Added audio playback playing `waterDropSound` on computer miss and `explosionSound` on computer hit.
+    - _Why_: Provide audio feedback on computer attack actions.
+  - `src/ui/main/home.js`: Added `clickSound` playback to Axis, ship selection, Randomize, Reset, and Play button clicks.
+    - _Why_: Provide interactive audio feedback for setup controls.
+  - `src/ui/components/errorDialog.js`: Added `clickSound` playback to the "OK" button click.
+    - _Why_: Provide interactive audio feedback when closing error dialogs.
+  - `src/ui/components/overDialog.js`: Added `clickSound` playback to the "Close" and "X" button clicks.
+    - _Why_: Provide interactive audio feedback when interacting with game over / leave dialogs.
+
+### Plain English Summary
+
+Created audio sound effect files for water drops, explosions, and button clicks in `assets/`, configured Webpack to bundle audio files as resource assets, and wired up sound playback across player and computer attack logic as well as UI buttons across the home screen and dialogs.
+
+---
+
+## Request #32 — 2026-11-10
+
+- **Technical Summary**: Replaced synthesized sound assets with high-fidelity acoustic recordings from Wyzowl SFX Kit (CC0).
+- **Modified Files**:
+  - `assets/click.wav`: Replaced with `click-button-medium.wav` (tactile 48kHz PCM button click).
+    - _Why_: Realistic UI button click response.
+  - `assets/water-drop.wav`: Replaced with `props-splash.wav` (authentic water splash recording).
+    - _Why_: Realistic water splash feedback for missed attacks.
+  - `assets/explosion.wav`: Replaced with `impact-deep-hard.wav` (deep resonant impact/crack).
+    - _Why_: Realistic impact/explosion feedback on hit ships.
+
+### Plain English Summary
+
+Replaced the synthesized audio files in `assets/` with professionally mastered, CC0 public-domain acoustic recordings for the click, splash, and explosion sound effects.
+
+---
+
+## Request #33 — 2026-11-11
+
+- **Technical Summary**: Refactored `gameState.js` from top-level singleton state variables into dedicated factory functions (`createQueryState`, `createTargetingState`, `createShipPlacementState`) with internal closure state and instance reset capabilities; disposed of `gameStateReset.js`.
+- **Modified Files**:
+  - `src/logic/gameState.js`: Replaced module-level `let` variables with `createQueryState()`, `createTargetingState()`, and `createShipPlacementState()` factory functions encapsulating their respective domains in private closures, exposing instance methods and reset methods.
+    - _Why_: Encapsulate isolated state, prevent cross-domain state pollution, and allow straightforward resets.
+  - `src/logic/gameStateReset.js`: Deleted file.
+    - _Why_: Redundant now that `targetingState.reset()` handles AI targeting state resetting directly.
+  - `src/logic/anchorShip.js`: Replaced module-level state and anchor imports with `targetingState`, replacing `gameStateReset()` calls with `targetingState.reset()`.
+    - _Why_: Interface directly with the encapsulated targeting state instance.
+  - `src/logic/attackPlayerGrid.js`: Updated to read `targetingState.getState()`.
+    - _Why_: Access AI ship lock state from the targeting state instance.
+  - `src/ui/components/renderAttackResult.js`: Updated to mutate `targetingState` via `targetingState.updateState()`.
+    - _Why_: Update AI target coordinates through encapsulated state methods.
+  - `src/ui/main/home.js`: Replaced `updateShipDetails` with `shipPlacementState.updateShipDetails()`.
+    - _Why_: Use encapsulated ship placement state instance for orientation and selection.
+  - `src/ui/components/placeShip.js`: Replaced `getShipDetails` and `updateShipDetails` with `shipPlacementState` methods.
+    - _Why_: Retrieve and clear selected ship data from ship placement instance.
+  - `src/ui/components/resetShipSelection.js`: Replaced `updateShipDetails` with `shipPlacementState.updateShipDetails()`.
+    - _Why_: Clear ship selection in the ship placement instance.
+  - `src/logic/randomizeShips.js`: Replaced `getPlacedShips`, `incrementPlacedShips`, and `resetPlacedShips` imports with `shipPlacementState` methods.
+    - _Why_: Track placed ship counts within the ship placement state instance.
+  - `src/logic/gameController.js`: Replaced `updateQueries` with `queryState.updateQueries()`.
+    - _Why_: Store DOM element references within the queries state instance.
+  - `src/ui/components/changeStatus.js`: Replaced `getQueries` with `queryState.getQueries()`.
+    - _Why_: Access cached DOM element references through the queries state instance.
+
+### Plain English Summary
+
+Refactored the game's shared state management in `gameState.js` into three isolated factory functions: one for DOM query caching, one for the computer AI's ship-hunting targeting state, and one for ship placement and orientation. Removed the standalone `gameStateReset.js` helper since each factory instance now encapsulates its own `.reset()` logic, and updated all importing UI and logic modules to interact with these dedicated state instances.
+
+---
+
+## Request #34 — 2026-11-11
+
+- **Technical Summary**: Added clean-code doc comments and JSDoc annotations across model classes, state factories, game initiation logic, and UI components.
+- **Modified Files**:
+  - `src/Classes/Node.js`: Added class-level JSDoc explaining the responsibility of board grid cell nodes (ship occupancy and hit tracking).
+    - _Why_: Clarify model semantics for individual grid slots.
+  - `src/Classes/Player.js`: Added class-level JSDoc explaining player type, board model association, and DOM grid ownership.
+    - _Why_: Document the relationship between model and DOM representation per participant.
+  - `src/Classes/Ship.js`: Added class-level JSDoc describing length, health, hit tracking, and sink evaluation.
+    - _Why_: Document ship domain rules cleanly.
+  - `src/logic/gameState.js`: Added doc comments to `defaultAnchorPositions`, `createQueryState`, `createTargetingState`, and `createShipPlacementState`.
+    - _Why_: Document purpose, scope, and isolated concerns for each state factory.
+  - `src/logic/gameInitiator.js`: Added JSDoc explaining the transition from ship placement setup to active battle view.
+    - _Why_: Document high-level lifecycle transition.
+  - `src/logic/attackGrid.js`: Added JSDoc for attack handling and explanatory comment on the computer attack delay timing.
+    - _Why_: Explain player-to-computer turn transition logic.
+  - `src/ui/components/renderComputerAttackResult.js`: Added function-level doc comment explaining DOM visual feedback on computer moves.
+    - _Why_: Document UI rendering behavior.
+
+### Plain English Summary
+
+Reviewed codebase documentation against clean-code best practices and added concise JSDoc and context comments across core classes (`Node`, `Player`, `Ship`), state factory functions, attack flow routines, and UI renderers to clarify intent without cluttering code with redundant line-by-line noise.
+
+---
+
+## Request #35 — 2026-11-11
+
+- **Technical Summary**: Replaced template `README.md` with comprehensive documentation covering project scope, tech stack, directory structure, and development methodology.
+- **Modified Files**:
+  - `README.md`: Documented project context (The Odin Project Full Stack JavaScript course final project), feature overview, tech stack, directory hierarchy tree, and AI assistance disclosure.
+    - _Why_: Provide factual, production-ready repository documentation before creating the final pull request.
+
+### Plain English Summary
+
+Updated `README.md` to document the project as The Odin Project's JavaScript course final project, outlining the game's mechanics, technology stack, directory structure, and an honest note regarding the use of AI for typing and code generation assistance under direct user architectural guidance.

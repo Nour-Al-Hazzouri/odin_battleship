@@ -53,31 +53,51 @@ class Gameboard {
   }
   // place the ship based on coordinates and direction while accounting for edges and other ships
   placeShip(length, coordinates, direction) {
-    if (this.#ships.length === 5) throw new Error("limit is 5 ships");
+    if (typeof length !== "number" || length < 2 || length > 5) {
+      throw new Error("length must be between 2 and 5");
+    }
+    if (
+      !Array.isArray(coordinates) ||
+      coordinates.length !== 2 ||
+      !validateCoordinates(coordinates[0], coordinates[1])
+    ) {
+      throw new Error("coordinates must be [0-9, 0-9]");
+    }
+    if (direction !== "v" && direction !== "h") {
+      throw new Error("direction must be 'v' or 'h'");
+    }
+
+    if (this.#ships.length >= 5) return false;
+
     // destructuring coordinates for easier usage
     const [x, y] = [coordinates[0], coordinates[1]];
-    // validate coordinates
-    if (!validateCoordinates(x, y))
-      throw new Error("out-of-bound coordinates are not acceptable");
+
     // create new ship and validate its position
     const newShip = new Ship(length);
-    if (!this.#validatePossibilities(x, y, direction, length))
-      throw new Error("invalid ship position");
+    if (!this.#validatePossibilities(x, y, direction, length)) return false;
+
     // assign ship to corresponding board slots
     for (let i = 0; i < length; i++) {
       if (direction === "v") this.#board[x + i][y].ship = newShip;
       else this.#board[x][y + i].ship = newShip;
     }
     this.#ships.push(newShip);
+    return true;
   }
   receiveAttack(coordinates) {
+    if (
+      !Array.isArray(coordinates) ||
+      coordinates.length !== 2 ||
+      !validateCoordinates(coordinates[0], coordinates[1])
+    ) {
+      throw new Error("coordinates must be [0-9, 0-9]");
+    }
     // destructuring coordinates for easier usage
     const [x, y] = [coordinates[0], coordinates[1]];
     const attackedSlot = this.#board[x][y];
-    if (!validateCoordinates(x, y))
-      throw new Error("out-of-bound coordinates are not acceptable");
+
     if (!attackedSlot.HitStatus) attackedSlot.hit();
-    else throw new Error("position already attacked");
+    else return false;
     if (attackedSlot.Ship) {
       attackedSlot.Ship.hit();
       attackedSlot.Ship.isSunk();
@@ -89,6 +109,7 @@ class Gameboard {
       if (ships[i].isSunk()) sunkShips += 1;
     }
     if (sunkShips === 5) this.#reportAllSunkShips();
+    return true;
   }
   resetBoard() {
     for (let i = 0; i < 10; i++) {

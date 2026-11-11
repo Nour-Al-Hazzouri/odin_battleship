@@ -26,7 +26,7 @@ export default {
         dependency: { not: ["url"] },
       },
       {
-        test: /\.(png|jpg|jpeg|gif)$/i,
+        test: /\.(png|jpg|jpeg|gif|wav|mp3)$/i,
         type: "asset/resource",
       },
       {
