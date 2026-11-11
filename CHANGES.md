@@ -550,3 +550,16 @@ Refactored the game's shared state management in `gameState.js` into three isola
 ### Plain English Summary
 
 Reviewed codebase documentation against clean-code best practices and added concise JSDoc and context comments across core classes (`Node`, `Player`, `Ship`), state factory functions, attack flow routines, and UI renderers to clarify intent without cluttering code with redundant line-by-line noise.
+
+---
+
+## Request #35 — 2026-11-11
+
+- **Technical Summary**: Replaced template `README.md` with comprehensive documentation covering project scope, tech stack, directory structure, and development methodology.
+- **Modified Files**:
+  - `README.md`: Documented project context (The Odin Project Full Stack JavaScript course final project), feature overview, tech stack, directory hierarchy tree, and AI assistance disclosure.
+    - _Why_: Provide factual, production-ready repository documentation before creating the final pull request.
+
+### Plain English Summary
+
+Updated `README.md` to document the project as The Odin Project's JavaScript course final project, outlining the game's mechanics, technology stack, directory structure, and an honest note regarding the use of AI for typing and code generation assistance under direct user architectural guidance.
